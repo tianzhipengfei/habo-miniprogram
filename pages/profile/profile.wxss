@@ -1,0 +1,32 @@
+.page { background: #f5f5f5; min-height: 100vh; }
+
+.user-card {
+  background: linear-gradient(135deg, #E8420F, #F57235);
+  padding: 60rpx 30rpx 40rpx;
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+}
+.avatar { width: 100rpx; height: 100rpx; border-radius: 50%; background: rgba(255,255,255,0.3); }
+.user-info { flex: 1; }
+.welcome { color: rgba(255,255,255,0.8); font-size: 24rpx; display: block; }
+.nickname { color: #fff; font-size: 34rpx; font-weight: bold; display: block; margin-top: 4rpx; }
+.balance-info { text-align: right; }
+.balance-label { color: rgba(255,255,255,0.8); font-size: 22rpx; display: block; }
+.balance-value { color: #fff; font-size: 36rpx; font-weight: bold; }
+
+.menu-section { background: #fff; margin: 20rpx; border-radius: 16rpx; overflow: hidden; }
+.menu-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 30rpx;
+  border-bottom: 1rpx solid var(--color-border);
+}
+.menu-item:last-child { border-bottom: none; }
+.menu-left { display: flex; align-items: center; gap: 16rpx; font-size: 28rpx; }
+.menu-icon { font-size: 36rpx; }
+.menu-arrow { color: var(--color-text-light); font-size: 32rpx; }
+
+.tech-support { text-align: center; padding: 40rpx 0; }
+.tech-text { font-size: 22rpx; color: #ccc; }

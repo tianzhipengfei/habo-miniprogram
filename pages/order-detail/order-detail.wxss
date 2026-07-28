@@ -1,0 +1,38 @@
+.page { background: #f5f5f5; min-height: 100vh; padding-bottom: 40rpx; }
+.status-card {
+  background: linear-gradient(135deg, #E8420F, #F57235);
+  color: #fff;
+  text-align: center;
+  padding: 50rpx 30rpx;
+}
+.status-icon { font-size: 60rpx; display: block; }
+.status-text { font-size: 36rpx; font-weight: bold; display: block; margin: 12rpx 0; }
+.status-desc { font-size: 26rpx; opacity: 0.8; display: block; }
+.pay-btn { margin: 30rpx auto 0; background: #fff; color: var(--color-primary); width: 300rpx; }
+
+.section { background: #fff; margin: 20rpx; border-radius: 16rpx; padding: 24rpx; }
+.section-title { font-size: 30rpx; font-weight: bold; margin-bottom: 16rpx; }
+.info-row { display: flex; justify-content: space-between; padding: 12rpx 0; font-size: 26rpx; }
+.info-row .l { color: var(--color-text-secondary); }
+.info-row .r { color: var(--color-text); }
+
+.order-item { display: flex; align-items: center; padding: 16rpx 0; border-bottom: 1rpx solid var(--color-border); }
+.order-item:last-child { border-bottom: none; }
+.item-img { width: 72rpx; height: 72rpx; border-radius: 8rpx; background: #f5f5f5; }
+.item-info { flex: 1; margin-left: 16rpx; }
+.item-name { font-size: 26rpx; }
+.item-qty { font-size: 22rpx; color: var(--color-text-light); margin-left: 8rpx; }
+.item-price { font-size: 26rpx; font-weight: 500; }
+
+.amount-row { display: flex; justify-content: space-between; padding: 10rpx 0; font-size: 26rpx; }
+.amount-row.total { border-top: 1rpx solid var(--color-border); margin-top: 12rpx; padding-top: 20rpx; font-weight: bold; }
+
+.cancel-btn {
+  text-align: center;
+  padding: 24rpx;
+  margin: 0 20rpx;
+  background: #fff;
+  border-radius: 16rpx;
+  color: var(--color-text-light);
+  font-size: 28rpx;
+}

@@ -1,0 +1,67 @@
+<!-- 门店选择页 -->
+<view class="page">
+  <!-- 顶部搜索 -->
+  <view class="search-bar">
+    <view class="search-box">
+      <text class="search-icon">🔍</text>
+      <input class="search-input" placeholder="搜索门店" value="{{keyword}}" bindinput="onSearchInput" bindconfirm="onSearch" />
+    </view>
+    <view class="city-selector" bindtap="showCityPicker">
+      <text>{{city}}</text>
+      <text class="city-arrow">▼</text>
+    </view>
+  </view>
+
+  <!-- 地图区域 -->
+  <view class="map-container">
+    <map
+      class="map"
+      latitude="{{centerLat}}"
+      longitude="{{centerLng}}"
+      markers="{{markers}}"
+      show-location="{{true}}"
+      bindmarkertap="onMarkerTap"
+    />
+  </view>
+
+  <!-- 门店列表 -->
+  <scroll-view class="store-list" scroll-y>
+    <view class="list-header">
+      <text class="list-title">{{stores.length}} 家门店</text>
+    </view>
+    <view
+      class="store-card"
+      wx:for="{{stores}}"
+      wx:key="id"
+      bindtap="selectStore"
+      data-id="{{item.id}}"
+    >
+      <view class="store-info">
+        <view class="store-name-row">
+          <text class="store-name">{{item.name}}</text>
+          <view class="store-tags">
+            <text class="tag tag-primary" wx:if="{{item.status === 1}}">可自取</text>
+            <text class="tag tag-gray" wx:if="{{item.status === 0}}">休息中</text>
+          </view>
+        </view>
+        <text class="store-address">{{item.address}}</text>
+        <view class="store-meta">
+          <text class="store-hours">🕐 {{item.business_hours}}</text>
+          <text class="store-distance" wx:if="{{item.distance}}">{{item.distance}}km</text>
+        </view>
+      </view>
+      <view class="store-actions">
+        <view class="action-btn" catchtap="callStore" data-phone="{{item.phone}}">
+          <text>📞</text>
+        </view>
+        <view class="action-btn" catchtap="navigateStore" data-item="{{item}}">
+          <text>🧭</text>
+        </view>
+        <view class="order-btn {{item.status === 0 ? 'disabled' : ''}}" catchtap="goOrder" data-id="{{item.id}}" data-status="{{item.status}}">
+          <text>去下单</text>
+        </view>
+      </view>
+    </view>
+    <empty-state wx:if="{{stores.length === 0 && !loading}}" text="暂无门店" />
+  </scroll-view>
+</view>

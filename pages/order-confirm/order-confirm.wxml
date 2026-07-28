@@ -1,0 +1,75 @@
+<!-- 订单确认页 -->
+<view class="page">
+  <!-- 门店信息 -->
+  <view class="section">
+    <view class="section-title">门店信息</view>
+    <view class="store-info">
+      <text class="store-name">{{store.name}}</text>
+      <text class="store-addr">{{store.address}}</text>
+    </view>
+  </view>
+
+  <!-- 用餐方式 -->
+  <view class="section">
+    <view class="section-title">用餐方式</view>
+    <view class="type-selector">
+      <view class="type-item {{orderType === 1 ? 'active' : ''}}" bindtap="setType" data-type="1">堂食</view>
+      <view class="type-item {{orderType === 2 ? 'active' : ''}}" bindtap="setType" data-type="2">打包</view>
+      <view class="type-item {{orderType === 3 ? 'active' : ''}}" bindtap="setType" data-type="3">快餐</view>
+    </view>
+
+    <!-- 堂食信息 -->
+    <view class="dinein-info" wx:if="{{orderType === 1}}">
+      <view class="info-row">
+        <text class="info-label">桌号</text>
+        <input class="info-input" placeholder="如：排桌(1-2)" value="{{tableNo}}" bindinput="onTableNo" />
+      </view>
+      <view class="info-row">
+        <text class="info-label">人数</text>
+        <stepper value="{{peopleCount}}" min="1" max="20" bindchange="onPeopleChange" />
+      </view>
+    </view>
+  </view>
+
+  <!-- 商品明细 -->
+  <view class="section">
+    <view class="section-title">商品明细</view>
+    <view class="order-item" wx:for="{{items}}" wx:key="id">
+      <image class="item-img" src="{{item.product_image}}" mode="aspectFill" />
+      <view class="item-info">
+        <text class="item-name">{{item.product_name}}</text>
+        <text class="item-qty">x{{item.quantity}}</text>
+      </view>
+      <text class="item-price">¥{{item.price * item.quantity}}</text>
+    </view>
+  </view>
+
+  <!-- 金额汇总 -->
+  <view class="section">
+    <view class="amount-row">
+      <text class="amount-label">商品小计</text>
+      <text class="amount-value">¥{{totalAmount}}</text>
+    </view>
+    <view class="amount-row" wx:if="{{discountAmount > 0}}">
+      <text class="amount-label">优惠券抵扣</text>
+      <text class="amount-value text-primary">-¥{{discountAmount}}</text>
+    </view>
+    <view class="amount-row" wx:if="{{balanceUsed > 0}}">
+      <text class="amount-label">余额抵扣</text>
+      <text class="amount-value text-primary">-¥{{balanceUsed}}</text>
+    </view>
+    <view class="amount-row total">
+      <text class="amount-label">实付金额</text>
+      <text class="price price-lg">¥{{payAmount}}</text>
+    </view>
+  </view>
+
+  <!-- 底部提交 -->
+  <view class="bottom-bar">
+    <view class="total-info">
+      <text class="total-label">实付</text>
+      <text class="price price-lg">¥{{payAmount}}</text>
+    </view>
+    <view class="submit-btn" bindtap="submitOrder">提交订单</view>
+  </view>
+</view>

@@ -1,0 +1,21 @@
+<!-- WiFi 页 -->
+<view class="page">
+  <view class="wifi-card">
+    <text class="wifi-icon">📶</text>
+    <text class="wifi-label">门店 WiFi</text>
+    <view class="wifi-info">
+      <view class="wifi-row">
+        <text class="wifi-key">网络名称</text>
+        <text class="wifi-val">{{wifiName || '暂无'}}</text>
+      </view>
+      <view class="wifi-row">
+        <text class="wifi-key">WiFi 密码</text>
+        <view class="wifi-val-row">
+          <text class="wifi-val">{{showPwd ? (wifiPassword || '暂无') : '****'}}</text>
+          <view class="toggle-btn" bindtap="togglePwd">{{showPwd ? '隐藏' : '显示'}}</view>
+        </view>
+      </view>
+    </view>
+    <view class="copy-btn" bindtap="copyPwd" wx:if="{{wifiPassword}}">复制密码</view>
+  </view>
+</view>

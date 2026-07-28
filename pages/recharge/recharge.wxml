@@ -1,0 +1,47 @@
+<!-- 充值页 -->
+<view class="page">
+  <view class="balance-header">
+    <text class="balance-label">当前余额</text>
+    <text class="balance-value">¥{{balance}}</text>
+  </view>
+
+  <view class="plan-section">
+    <text class="section-title">选择充值金额</text>
+    <view class="plan-grid">
+      <view
+        class="plan-item {{selectedAmount === item.amount ? 'active' : ''}}"
+        wx:for="{{plans}}"
+        wx:key="amount"
+        bindtap="selectPlan"
+        data-amount="{{item.amount}}"
+      >
+        <text class="plan-amount">¥{{item.amount}}</text>
+        <text class="plan-bonus" wx:if="{{item.bonus > 0}}">送{{item.bonus}}元</text>
+        <text class="plan-label">{{item.label}}</text>
+      </view>
+    </view>
+
+    <view class="custom-amount">
+      <text class="custom-label">自定义金额</text>
+      <input class="custom-input" type="digit" placeholder="输入充值金额" value="{{customAmount}}" bindinput="onCustomAmount" />
+    </view>
+  </view>
+
+  <view class="submit-section">
+    <view class="recharge-summary" wx:if="{{selectedAmount > 0 || customAmount > 0}}">
+      <text class="summary-text">实付 ¥{{rechargeAmount}}，到账 ¥{{rechargeAmount + currentBonus}}</text>
+    </view>
+    <view class="btn btn-primary btn-block" bindtap="doRecharge">立即充值</view>
+  </view>
+
+  <view class="records" wx:if="{{records.length > 0}}">
+    <text class="section-title">充值记录</text>
+    <view class="record-item" wx:for="{{records}}" wx:key="id">
+      <view class="record-info">
+        <text class="record-amount">+¥{{item.total}}</text>
+        <text class="record-bonus" wx:if="{{item.bonus > 0}}">含赠送¥{{item.bonus}}</text>
+      </view>
+      <text class="record-time">{{item.created_at}}</text>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,24 @@
+.page { background: #f5f5f5; min-height: 100vh; padding: 40rpx 20rpx; }
+.wifi-card {
+  background: #fff;
+  border-radius: 16rpx;
+  padding: 50rpx 30rpx;
+  text-align: center;
+}
+.wifi-icon { font-size: 80rpx; display: block; }
+.wifi-label { font-size: 32rpx; font-weight: bold; display: block; margin: 16rpx 0 30rpx; }
+.wifi-info { text-align: left; }
+.wifi-row { display: flex; justify-content: space-between; padding: 20rpx 0; border-bottom: 1rpx solid var(--color-border); }
+.wifi-key { font-size: 26rpx; color: var(--color-text-secondary); }
+.wifi-val { font-size: 28rpx; font-weight: 500; }
+.wifi-val-row { display: flex; align-items: center; gap: 16rpx; }
+.toggle-btn { font-size: 24rpx; color: var(--color-primary); }
+.copy-btn {
+  margin-top: 30rpx;
+  background: var(--color-primary);
+  color: #fff;
+  padding: 16rpx 40rpx;
+  border-radius: 30rpx;
+  font-size: 28rpx;
+  display: inline-block;
+}

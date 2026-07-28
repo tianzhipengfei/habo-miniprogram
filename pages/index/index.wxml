@@ -1,0 +1,84 @@
+<!-- 首页 -->
+<view class="page">
+  <!-- 顶部品牌区域 -->
+  <view class="header">
+    <image class="logo" src="/images/logo.png" mode="aspectFit" />
+  </view>
+
+  <!-- 欢迎条 -->
+  <view class="welcome-bar">
+    <text class="welcome-text">HELLO! ENJOY IN HABO</text>
+    <view class="join-btn" bindtap="goMember">
+      <text>加入会员</text>
+    </view>
+  </view>
+
+  <!-- 点餐入口 -->
+  <view class="order-entries">
+    <view class="order-entry" bindtap="goOrder" data-type="2">
+      <image class="entry-icon" src="/images/icon-takeaway.png" mode="aspectFit" />
+      <text class="entry-label">打包</text>
+    </view>
+    <view class="order-entry" bindtap="goOrder" data-type="1">
+      <image class="entry-icon" src="/images/icon-dinein.png" mode="aspectFit" />
+      <text class="entry-label">堂食</text>
+    </view>
+  </view>
+
+  <!-- 优惠券条 -->
+  <view class="coupon-bar" bindtap="goCoupons">
+    <view class="coupon-bar-left">
+      <image class="coupon-icon" src="/images/icon-coupon.png" mode="aspectFit" />
+      <text class="coupon-text">优惠券</text>
+    </view>
+    <view class="coupon-bar-right">
+      <text class="coupon-action">立即领取</text>
+      <text class="coupon-arrow">›</text>
+    </view>
+  </view>
+
+  <!-- 功能宫格 -->
+  <view class="feature-grid">
+    <view class="feature-item" bindtap="goMember">
+      <image class="feature-icon" src="/images/icon-member.png" mode="aspectFit" />
+      <text class="feature-label">会员中心</text>
+    </view>
+    <view class="feature-item" bindtap="goRecharge">
+      <image class="feature-icon" src="/images/icon-recharge.png" mode="aspectFit" />
+      <text class="feature-label">充值中心</text>
+    </view>
+  </view>
+
+  <!-- 功能列表 -->
+  <view class="feature-list">
+    <view class="feature-list-item" bindtap="goInvite">
+      <view class="flex-between">
+        <view class="flex-center">
+          <image class="list-icon" src="/images/icon-invite.png" mode="aspectFit" />
+          <text>邀请有礼</text>
+        </view>
+        <text class="list-arrow">›</text>
+      </view>
+    </view>
+    <view class="feature-list-item" bindtap="goStores">
+      <view class="flex-between">
+        <view class="flex-center">
+          <image class="list-icon" src="/images/icon-store.png" mode="aspectFit" />
+          <text>门店导航</text>
+        </view>
+        <text class="list-arrow">›</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 底部品牌信息 -->
+  <view class="footer-brand">
+    <text class="footer-text">HABO BURGER</text>
+    <text class="footer-sub">Eat Bold, Move Bold</text>
+  </view>
+
+  <!-- 技术支持 -->
+  <view class="tech-support">
+    <text class="tech-text">爨火餐饮系统 点击了解详情 ></text>
+  </view>
+</view>

@@ -1,0 +1,53 @@
+<!-- 我的页 -->
+<view class="page">
+  <!-- 用户信息 -->
+  <view class="user-card" bindtap="login" wx:if="{{!hasLogin}}">
+    <image class="avatar" src="/images/default-avatar.png" mode="aspectFill" />
+    <view class="user-info">
+      <text class="welcome">欢迎回来</text>
+      <text class="nickname">点击登录</text>
+    </view>
+  </view>
+
+  <view class="user-card" wx:if="{{hasLogin}}">
+    <image class="avatar" src="{{user.avatar_url || '/images/default-avatar.png'}}" mode="aspectFill" />
+    <view class="user-info">
+      <text class="welcome">欢迎回来</text>
+      <text class="nickname">{{user.nickname}}</text>
+    </view>
+    <view class="balance-info" wx:if="{{user.balance > 0}}">
+      <text class="balance-label">余额</text>
+      <text class="balance-value">¥{{user.balance}}</text>
+    </view>
+  </view>
+
+  <!-- 功能列表 -->
+  <view class="menu-section">
+    <view class="menu-item" bindtap="goRecharge">
+      <view class="menu-left">
+        <text class="menu-icon">💳</text>
+        <text>充值中心</text>
+      </view>
+      <text class="menu-arrow">›</text>
+    </view>
+    <view class="menu-item" bindtap="goCoupons">
+      <view class="menu-left">
+        <text class="menu-icon">🎫</text>
+        <text>我的优惠券</text>
+      </view>
+      <text class="menu-arrow">›</text>
+    </view>
+    <view class="menu-item" bindtap="goWifi">
+      <view class="menu-left">
+        <text class="menu-icon">📶</text>
+        <text>WIFI</text>
+      </view>
+      <text class="menu-arrow">›</text>
+    </view>
+  </view>
+
+  <!-- 技术支持 -->
+  <view class="tech-support">
+    <text class="tech-text">爨火餐饮系统 点击了解详情 ></text>
+  </view>
+</view>

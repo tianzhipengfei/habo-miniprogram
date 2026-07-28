@@ -1,0 +1,198 @@
+/* 首页样式 */
+.page {
+  min-height: 100vh;
+  background: #fff;
+}
+
+/* 顶部品牌 */
+.header {
+  background: linear-gradient(135deg, #E8420F, #F57235);
+  padding: 60rpx 30rpx 80rpx;
+  display: flex;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+.header::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: repeating-linear-gradient(
+    45deg,
+    transparent,
+    transparent 10rpx,
+    rgba(255,255,255,0.05) 10rpx,
+    rgba(255,255,255,0.05) 20rpx
+  );
+}
+.logo {
+  width: 200rpx;
+  height: 80rpx;
+}
+
+/* 欢迎条 */
+.welcome-bar {
+  margin: -40rpx 30rpx 0;
+  background: #1a1a1a;
+  border-radius: 20rpx;
+  padding: 30rpx;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  z-index: 1;
+}
+.welcome-text {
+  color: #fff;
+  font-size: 30rpx;
+  font-weight: bold;
+  letter-spacing: 4rpx;
+}
+.join-btn {
+  background: var(--color-primary);
+  color: #fff;
+  padding: 10rpx 30rpx;
+  border-radius: 30rpx;
+  font-size: 24rpx;
+}
+
+/* 点餐入口 */
+.order-entries {
+  display: flex;
+  margin: 30rpx;
+  gap: 20rpx;
+}
+.order-entry {
+  flex: 1;
+  background: var(--color-orange-light);
+  border: 2rpx solid var(--color-primary);
+  border-radius: 20rpx;
+  padding: 40rpx 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12rpx;
+}
+.entry-icon {
+  width: 64rpx;
+  height: 64rpx;
+}
+.entry-label {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: var(--color-primary);
+}
+
+/* 优惠券条 */
+.coupon-bar {
+  margin: 0 30rpx 20rpx;
+  background: linear-gradient(90deg, #FFF5F0, #FFE8D5);
+  border-radius: 16rpx;
+  padding: 24rpx 30rpx;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.coupon-bar-left {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+}
+.coupon-icon {
+  width: 40rpx;
+  height: 40rpx;
+}
+.coupon-text {
+  font-size: 28rpx;
+  font-weight: 500;
+}
+.coupon-bar-right {
+  display: flex;
+  align-items: center;
+  gap: 4rpx;
+}
+.coupon-action {
+  color: var(--color-primary);
+  font-size: 26rpx;
+  font-weight: 500;
+}
+.coupon-arrow {
+  color: var(--color-primary);
+  font-size: 32rpx;
+}
+
+/* 功能宫格 */
+.feature-grid {
+  display: flex;
+  margin: 0 30rpx 20rpx;
+  gap: 20rpx;
+}
+.feature-item {
+  flex: 1;
+  background: #fafafa;
+  border-radius: 16rpx;
+  padding: 40rpx 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12rpx;
+}
+.feature-icon {
+  width: 56rpx;
+  height: 56rpx;
+}
+.feature-label {
+  font-size: 26rpx;
+  color: var(--color-text);
+}
+
+/* 功能列表 */
+.feature-list {
+  margin: 0 30rpx 20rpx;
+}
+.feature-list-item {
+  padding: 30rpx 0;
+  border-bottom: 1rpx solid var(--color-border);
+}
+.feature-list-item:last-child {
+  border-bottom: none;
+}
+.list-icon {
+  width: 40rpx;
+  height: 40rpx;
+  margin-right: 16rpx;
+}
+.list-arrow {
+  color: var(--color-text-light);
+  font-size: 32rpx;
+}
+
+/* 底部品牌 */
+.footer-brand {
+  text-align: center;
+  padding: 60rpx 0 30rpx;
+}
+.footer-text {
+  display: block;
+  font-size: 36rpx;
+  font-weight: bold;
+  color: var(--color-primary);
+  letter-spacing: 8rpx;
+}
+.footer-sub {
+  display: block;
+  font-size: 22rpx;
+  color: var(--color-text-light);
+  margin-top: 8rpx;
+  letter-spacing: 4rpx;
+}
+
+/* 技术支持 */
+.tech-support {
+  text-align: center;
+  padding: 20rpx 0 40rpx;
+}
+.tech-text {
+  font-size: 22rpx;
+  color: #ccc;
+}

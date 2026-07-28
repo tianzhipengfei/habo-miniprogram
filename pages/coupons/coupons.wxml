@@ -1,0 +1,39 @@
+<!-- 优惠券页 -->
+<view class="page">
+  <view class="tabs">
+    <view class="tab {{tab === 'available' ? 'active' : ''}}" bindtap="switchTab" data-tab="available">可领取</view>
+    <view class="tab {{tab === 'my' ? 'active' : ''}}" bindtap="switchTab" data-tab="my">我的</view>
+  </view>
+
+  <!-- 可领取 -->
+  <scroll-view class="coupon-list" scroll-y wx:if="{{tab === 'available'}}">
+    <view class="coupon-card" wx:for="{{availableCoupons}}" wx:key="id">
+      <view class="coupon-left">
+        <text class="coupon-value">¥{{item.value}}</text>
+        <text class="coupon-condition">满{{item.min_amount}}可用</text>
+      </view>
+      <view class="coupon-right">
+        <text class="coupon-name">{{item.name}}</text>
+        <text class="coupon-desc">{{item.description}}</text>
+        <text class="coupon-expire">有效期至 {{item.end_time}}</text>
+      </view>
+      <view class="claim-btn" bindtap="claimCoupon" data-id="{{item.id}}">领取</view>
+    </view>
+    <empty-state wx:if="{{availableCoupons.length === 0}}" text="暂无可领取优惠券" />
+  </scroll-view>
+
+  <!-- 我的 -->
+  <scroll-view class="coupon-list" scroll-y wx:if="{{tab === 'my'}}">
+    <view class="coupon-card {{item.status !== 1 ? 'used' : ''}}" wx:for="{{myCoupons}}" wx:key="id">
+      <view class="coupon-left">
+        <text class="coupon-value">¥{{item.coupon.value}}</text>
+        <text class="coupon-condition">满{{item.coupon.min_amount}}可用</text>
+      </view>
+      <view class="coupon-right">
+        <text class="coupon-name">{{item.coupon.name}}</text>
+        <text class="coupon-status">{{statusText[item.status]}}</text>
+      </view>
+    </view>
+    <empty-state wx:if="{{myCoupons.length === 0}}" text="暂无优惠券" />
+  </scroll-view>
+</view>

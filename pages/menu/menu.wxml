@@ -1,0 +1,95 @@
+<!-- 点单页 -->
+<view class="page">
+  <!-- 门店信息 -->
+  <view class="store-bar" bindtap="goStores">
+    <view class="store-info">
+      <text class="store-name">{{store.name || '请选择门店'}}</text>
+      <text class="store-distance" wx:if="{{store.distance}}">{{store.distance}}km</text>
+    </view>
+    <text class="switch-store">切换门店 ›</text>
+  </view>
+
+  <!-- 活动公告 -->
+  <view class="notice-bar" wx:if="{{store.id}}">
+    <text class="notice-text">充值福利，快来储蓄叭~</text>
+    <text class="notice-more">更多</text>
+  </view>
+
+  <!-- 推荐商品 -->
+  <scroll-view class="recommend-row" scroll-x wx:if="{{recommends.length > 0}}">
+    <view class="recommend-item" wx:for="{{recommends}}" wx:key="id" bindtap="goDetail" data-id="{{item.id}}">
+      <image class="rec-img" src="{{item.image}}" mode="aspectFill" />
+      <text class="rec-name">{{item.name}}</text>
+      <text class="rec-price">¥{{item.price}}</text>
+    </view>
+  </scroll-view>
+
+  <!-- 商品区 -->
+  <view class="content" wx:if="{{store.id}}">
+    <!-- 左侧分类 -->
+    <scroll-view class="category-list" scroll-y>
+      <view
+        class="category-item {{currentCategory === index ? 'active' : ''}}"
+        wx:for="{{categories}}"
+        wx:key="id"
+        wx:for-index="index"
+        bindtap="switchCategory"
+        data-index="{{index}}"
+      >
+        <text>{{item.name}}</text>
+      </view>
+    </scroll-view>
+
+    <!-- 右侧商品 -->
+    <scroll-view class="product-list" scroll-y>
+      <view
+        class="product-card"
+        wx:for="{{filteredProducts}}"
+        wx:key="id"
+        bindtap="goDetail"
+        data-id="{{item.id}}"
+      >
+        <image class="product-img" src="{{item.image}}" mode="aspectFill" />
+        <view class="product-info">
+          <text class="product-name">{{item.name}}</text>
+          <text class="product-desc" wx:if="{{item.description}}">{{item.description}}</text>
+          <text class="product-sales">销量：{{item.sales_count}}</text>
+          <view class="product-bottom">
+            <text class="product-price">¥{{item.price}}<text class="price-from" wx:if="{{item.is_combo}}"> 起</text></text>
+            <view class="select-btn" catchtap="quickAdd" data-item="{{item}}">
+              <text>选择</text>
+            </view>
+          </view>
+        </view>
+      </view>
+      <empty-state wx:if="{{filteredProducts.length === 0 && !loading}}" text="暂无商品" />
+    </scroll-view>
+  </view>
+
+  <!-- 未选门店 -->
+  <view class="no-store" wx:if="{{!store.id}}">
+    <image class="no-store-icon" src="/images/icon-store.png" mode="aspectFit" />
+    <text class="no-store-text">请先选择门店</text>
+    <view class="btn btn-primary" bindtap="goStores">选择门店</view>
+  </view>
+
+  <!-- 门店休息中遮罩 -->
+  <view class="closed-overlay" wx:if="{{store.id && store.status === 0}}">
+    <text>门店休息中</text>
+    <text class="closed-hours">营业时间：{{store.business_hours}}</text>
+  </view>
+
+  <!-- 底部购物车栏 -->
+  <view class="cart-bar" wx:if="{{store.id}}">
+    <view class="cart-icon-wrap" bindtap="goCart">
+      <text class="cart-icon">🛒</text>
+      <text class="cart-badge" wx:if="{{cartCount > 0}}">{{cartCount}}</text>
+    </view>
+    <view class="cart-price" wx:if="{{cartCount > 0}}">
+      <text class="price">¥{{cartTotal}}</text>
+    </view>
+    <view class="checkout-btn {{cartCount === 0 || store.status === 0 ? 'disabled' : ''}}" bindtap="goCheckout">
+      <text>去结算</text>
+    </view>
+  </view>
+</view>

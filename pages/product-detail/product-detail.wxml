@@ -1,0 +1,56 @@
+<!-- 商品详情页 -->
+<view class="page">
+  <!-- 商品大图 -->
+  <swiper class="image-swiper" wx:if="{{product.images && product.images.length > 0}}">
+    <swiper-item wx:for="{{product.images}}" wx:key="*this">
+      <image class="product-main-img" src="{{item}}" mode="aspectFill" />
+    </swiper-item>
+  </swiper>
+  <image class="product-main-img single" src="{{product.image}}" mode="aspectFill" wx:else />
+
+  <!-- 商品信息 -->
+  <view class="info-section">
+    <text class="product-name">{{product.name}}</text>
+    <view class="product-meta">
+      <text class="product-sales">销量：{{product.sales_count}}</text>
+    </view>
+    <text class="product-desc" wx:if="{{product.description}}">{{product.description}}</text>
+    <view class="price-row">
+      <text class="price price-lg">¥{{product.price}}</text>
+      <text class="original-price" wx:if="{{product.original_price > product.price}}">¥{{product.original_price}}</text>
+    </view>
+  </view>
+
+  <!-- 商品详情 -->
+  <view class="detail-section" wx:if="{{product.detail_html}}">
+    <view class="section-title">商品详情</view>
+    <rich-text nodes="{{product.detail_html}}" />
+  </view>
+
+  <!-- 底部操作 -->
+  <view class="bottom-bar">
+    <view class="bottom-actions">
+      <view class="bottom-action" bindtap="goIndex">
+        <text class="action-icon">🏠</text>
+        <text class="action-text">首页</text>
+      </view>
+      <view class="bottom-action" bindtap="shareProduct">
+        <text class="action-icon">📤</text>
+        <text class="action-text">分享</text>
+      </view>
+      <view class="bottom-action" bindtap="goCart">
+        <text class="action-icon">🛒</text>
+        <text class="action-text">购物车</text>
+        <text class="badge" wx:if="{{cartCount > 0}}">{{cartCount}}</text>
+      </view>
+    </view>
+    <view class="select-btn" bindtap="onSelect">选择</view>
+    <view class="checkout-btn" bindtap="goCheckout">去结算</view>
+  </view>
+
+  <!-- 门店休息遮罩 -->
+  <view class="closed-overlay" wx:if="{{store.status === 0}}">
+    <text>门店休息中</text>
+    <text class="closed-hours">营业时间：{{store.business_hours}}</text>
+  </view>
+</view>

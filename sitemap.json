@@ -1,0 +1,7 @@
+{
+  "rules": [{
+    "action": "pages/index/index",
+    "params": {},
+    "matching": "exact"
+  }]
+}
