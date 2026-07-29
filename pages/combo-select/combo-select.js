@@ -6,6 +6,7 @@ Page({
     product: {},
     comboGroups: [],
     currentGroup: 0,
+    currentOptions: [],
     selectedMap: {},   // { groupId: [optionId] }
     totalSelected: 0,
     totalRequired: 0,
@@ -27,6 +28,7 @@ Page({
           comboPrice: parseFloat(product.price) || 0,
         });
         this.calcRequired();
+        this.updateCurrentOptions();
       });
   },
 
@@ -40,11 +42,12 @@ Page({
 
   switchGroup(e) {
     this.setData({ currentGroup: e.currentTarget.dataset.index });
+    this.updateCurrentOptions();
   },
 
-  get currentOptions() {
+  updateCurrentOptions() {
     const group = this.data.comboGroups[this.data.currentGroup];
-    return group ? group.options : [];
+    this.setData({ currentOptions: group ? (group.options || []) : [] });
   },
 
   isSelected(groupIndex, optionId) {
