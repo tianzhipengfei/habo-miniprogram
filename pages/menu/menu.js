@@ -6,6 +6,7 @@ Page({
     store: null,
     categories: [],
     products: [],
+    filteredProducts: [],
     recommends: [],
     currentCategory: 0,
     cartCount: 0,
@@ -41,10 +42,23 @@ Page({
         const products = data.products || [];
         const recommends = products.filter((p) => p.is_recommend);
         this.setData({ products, recommends, loading: false });
+        this.updateFilteredProducts();
       })
       .catch(() => {
         this.setData({ loading: false });
       });
+  },
+
+  updateFilteredProducts() {
+    const { currentCategory, categories, products } = this.data;
+    let filtered;
+    if (currentCategory === 0) {
+      filtered = products;
+    } else {
+      const catId = categories[currentCategory]?.id;
+      filtered = products.filter((p) => p.category_id === catId);
+    }
+    this.setData({ filteredProducts: filtered });
   },
 
   loadCart() {
@@ -65,15 +79,10 @@ Page({
     this.setData({ currentCategory: index });
     if (category) {
       this.loadProducts(this.data.store.id, category.id);
+    } else {
+      // index === 0 表示"全部"，显示所有产品
+      this.updateFilteredProducts();
     }
-  },
-
-  get filteredProducts() {
-    if (this.data.currentCategory === 0) {
-      return this.data.products;
-    }
-    const catId = this.data.categories[this.data.currentCategory]?.id;
-    return this.data.products.filter((p) => p.category_id === catId);
   },
 
   goDetail(e) {
