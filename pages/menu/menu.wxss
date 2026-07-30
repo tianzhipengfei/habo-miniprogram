@@ -90,7 +90,8 @@
   gap: 4rpx;
 }
 .category-icon {
-  font-size: 36rpx;
+  width: 48rpx;
+  height: 48rpx;
 }
 .category-item.active {
   background: #fff;
@@ -188,7 +189,10 @@
   padding-bottom: 12rpx;
 }
 .cart-icon-wrap { position: relative; }
-.cart-icon { font-size: 44rpx; }
+.cart-icon {
+  width: 48rpx;
+  height: 48rpx;
+}
 .cart-badge {
   position: absolute;
   top: -8rpx;

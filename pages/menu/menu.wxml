@@ -36,7 +36,7 @@
         bindtap="switchCategory"
         data-index="{{index}}"
       >
-        <text class="category-icon">{{item.icon}}</text>
+        <image class="category-icon" src="{{item.icon}}" mode="aspectFit" />
         <text>{{item.name}}</text>
       </view>
     </scroll-view>
@@ -83,7 +83,7 @@
   <!-- 底部购物车栏 -->
   <view class="cart-bar" wx:if="{{store.id}}">
     <view class="cart-icon-wrap" bindtap="goCart">
-      <text class="cart-icon">🛒</text>
+      <image class="cart-icon" src="/images/menu/icon-cart.png" mode="aspectFit" />
       <text class="cart-badge" wx:if="{{cartCount > 0}}">{{cartCount}}</text>
     </view>
     <view class="cart-price" wx:if="{{cartCount > 0}}">

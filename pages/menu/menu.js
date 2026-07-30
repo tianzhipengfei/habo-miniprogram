@@ -3,11 +3,11 @@ const app = getApp();
 
 // 分类 icon 映射
 const CATEGORY_ICONS = {
-  '套餐': '🍔',
-  '汉堡': '🍔',
-  '饮品': '🥤',
-  '小吃': '🍟',
-  '加料': '🧀',
+  '套餐': '/images/menu/icon-combo.png',
+  '汉堡': '/images/menu/icon-burger.png',
+  '饮品': '/images/menu/icon-drink.png',
+  '小吃': '/images/menu/icon-snack.png',
+  '加料': '/images/menu/icon-extra.png',
 };
 
 Page({
