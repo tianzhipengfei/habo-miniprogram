@@ -1,6 +1,15 @@
 // 点单页
 const app = getApp();
 
+// 分类 icon 映射
+const CATEGORY_ICONS = {
+  '套餐': '🍔',
+  '汉堡': '🍔',
+  '饮品': '🥤',
+  '小吃': '🍟',
+  '加料': '🧀',
+};
+
 Page({
   data: {
     store: null,
@@ -27,7 +36,11 @@ Page({
   loadCategories(storeId) {
     app.get(`/products/categories?store_id=${storeId}`, {}, false)
       .then((data) => {
-        this.setData({ categories: data.categories || [] });
+        const categories = (data.categories || []).map(c => ({
+          ...c,
+          icon: CATEGORY_ICONS[c.name] || '📦',
+        }));
+        this.setData({ categories });
       })
       .catch(() => {});
   },

@@ -36,6 +36,7 @@
         bindtap="switchCategory"
         data-index="{{index}}"
       >
+        <text class="category-icon">{{item.icon}}</text>
         <text>{{item.name}}</text>
       </view>
     </scroll-view>

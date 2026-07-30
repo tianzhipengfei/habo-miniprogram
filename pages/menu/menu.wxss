@@ -5,17 +5,21 @@
   background: #fff;
 }
 
-/* 门店条 */
+/* 门店条 - 橙色系 */
 .store-bar {
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 20rpx 30rpx;
-  background: #1a1a1a;
+  background: linear-gradient(135deg, #E8420F, #F57235);
+}
+.store-info {
+  display: flex;
+  align-items: center;
 }
 .store-name { color: #fff; font-size: 28rpx; font-weight: 500; }
-.store-distance { color: #ccc; font-size: 24rpx; margin-left: 12rpx; }
-.switch-store { color: var(--color-primary); font-size: 24rpx; }
+.store-distance { color: rgba(255,255,255,0.7); font-size: 24rpx; margin-left: 12rpx; }
+.switch-store { color: #fff; font-size: 24rpx; opacity: 0.9; }
 
 /* 公告 */
 .notice-bar {
@@ -75,11 +79,18 @@
   height: 100%;
 }
 .category-item {
-  padding: 30rpx 20rpx;
+  padding: 24rpx 10rpx;
   text-align: center;
-  font-size: 26rpx;
+  font-size: 24rpx;
   color: var(--color-text-secondary);
   position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4rpx;
+}
+.category-icon {
+  font-size: 36rpx;
 }
 .category-item.active {
   background: #fff;
@@ -168,12 +179,12 @@
 }
 .closed-hours { display: block; font-size: 22rpx; margin-top: 8rpx; opacity: 0.7; }
 
-/* 购物车栏 */
+/* 购物车栏 - 橙色系 */
 .cart-bar {
   display: flex;
   align-items: center;
   padding: 16rpx 30rpx;
-  background: #1a1a1a;
+  background: linear-gradient(135deg, #E8420F, #F57235);
   padding-bottom: calc(16rpx + env(safe-area-inset-bottom));
 }
 .cart-icon-wrap { position: relative; margin-right: 20rpx; }
@@ -182,8 +193,8 @@
   position: absolute;
   top: -8rpx;
   right: -8rpx;
-  background: var(--color-primary);
-  color: #fff;
+  background: #fff;
+  color: var(--color-primary);
   font-size: 20rpx;
   min-width: 32rpx;
   height: 32rpx;
@@ -191,18 +202,20 @@
   text-align: center;
   line-height: 32rpx;
   padding: 0 6rpx;
+  font-weight: bold;
 }
 .cart-price { flex: 1; }
 .cart-price .price { color: #fff; font-size: 32rpx; font-weight: bold; }
 .checkout-btn {
-  background: var(--color-primary);
-  color: #fff;
+  background: #fff;
+  color: var(--color-primary);
   padding: 16rpx 50rpx;
   border-radius: 40rpx;
   font-size: 28rpx;
-  font-weight: 500;
+  font-weight: 600;
 }
 .checkout-btn.disabled {
-  background: #555;
+  background: rgba(255,255,255,0.4);
+  color: rgba(255,255,255,0.7);
   pointer-events: none;
 }
