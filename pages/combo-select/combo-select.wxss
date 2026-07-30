@@ -147,6 +147,26 @@
   transform: translateX(-1rpx);
 }
 
+/* 无定制项时的"+"加购按钮 */
+.add-one-btn {
+  width: 40rpx;
+  height: 40rpx;
+  border-radius: 50%;
+  background: var(--color-primary);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.plus-icon {
+  color: #fff;
+  font-size: 34rpx;
+  font-weight: bold;
+  line-height: 40rpx;
+  transform: translateY(-2rpx);
+}
+
 /* 底部占位，防止内容被 bottom-bar 遮挡 */
 .bottom-placeholder {
   height: 140rpx;

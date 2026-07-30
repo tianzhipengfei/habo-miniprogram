@@ -258,7 +258,7 @@ Page({
       return;
     }
 
-    const store = app.globalData.currentStore;
+    const store = app.globalData.currentStore || wx.getStorageSync('currentStore');
     if (!store || !store.id) {
       wx.showToast({ title: '请先选择门店', icon: 'none' });
       return;

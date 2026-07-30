@@ -33,14 +33,16 @@
             </block>
             <block wx:else>
               <text class="card-price">¥{{opt.product.priceText}}</text>
-              <view
-                class="arrow-btn"
-                catchtap="onCustomBtnTap"
-                data-group-id="{{burgerGroup.id}}"
-                data-option-id="{{opt.id}}"
-              >
-                <text class="arrow-icon">›</text>
-              </view>
+              <block wx:if="{{opt.product.custom_options && opt.product.custom_options.length > 0}}">
+                <view class="arrow-btn" catchtap="onCustomBtnTap" data-group-id="{{burgerGroup.id}}" data-option-id="{{opt.id}}">
+                  <text class="arrow-icon">›</text>
+                </view>
+              </block>
+              <block wx:else>
+                <view class="add-one-btn" catchtap="toggleOption" data-group-id="{{burgerGroup.id}}" data-option-id="{{opt.id}}">
+                  <text class="plus-icon">+</text>
+                </view>
+              </block>
             </block>
           </view>
         </view>
@@ -75,14 +77,16 @@
             </block>
             <block wx:else>
               <text class="card-price">¥{{opt.product.priceText}}</text>
-              <view
-                class="arrow-btn"
-                catchtap="onCustomBtnTap"
-                data-group-id="{{group.id}}"
-                data-option-id="{{opt.id}}"
-              >
-                <text class="arrow-icon">›</text>
-              </view>
+              <block wx:if="{{opt.product.custom_options && opt.product.custom_options.length > 0}}">
+                <view class="arrow-btn" catchtap="onCustomBtnTap" data-group-id="{{group.id}}" data-option-id="{{opt.id}}">
+                  <text class="arrow-icon">›</text>
+                </view>
+              </block>
+              <block wx:else>
+                <view class="add-one-btn" catchtap="toggleOption" data-group-id="{{group.id}}" data-option-id="{{opt.id}}">
+                  <text class="plus-icon">+</text>
+                </view>
+              </block>
             </block>
           </view>
         </view>
