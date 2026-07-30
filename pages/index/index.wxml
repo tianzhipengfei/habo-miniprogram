@@ -16,11 +16,11 @@
   <!-- 点餐入口 -->
   <view class="order-entries">
     <view class="order-entry" bindtap="goOrder" data-type="2">
-      <image class="entry-icon" src="/images/icon-takeaway.png" mode="aspectFit" />
+      <image class="entry-icon" src="/images/index/icon-takeaway.png" mode="aspectFit" />
       <text class="entry-label">打包</text>
     </view>
     <view class="order-entry" bindtap="goOrder" data-type="1">
-      <image class="entry-icon" src="/images/icon-dinein.png" mode="aspectFit" />
+      <image class="entry-icon" src="/images/index/icon-dinein.png" mode="aspectFit" />
       <text class="entry-label">堂食</text>
     </view>
   </view>
@@ -28,7 +28,7 @@
   <!-- 优惠券条 -->
   <view class="coupon-bar" bindtap="goCoupons">
     <view class="coupon-bar-left">
-      <image class="coupon-icon" src="/images/icon-coupon.png" mode="aspectFit" />
+      <image class="coupon-icon" src="/images/index/icon-coupon.png" mode="aspectFit" />
       <text class="coupon-text">优惠券</text>
     </view>
     <view class="coupon-bar-right">
@@ -40,11 +40,11 @@
   <!-- 功能宫格 -->
   <view class="feature-grid">
     <view class="feature-item" bindtap="goMember">
-      <image class="feature-icon" src="/images/icon-member.png" mode="aspectFit" />
+      <image class="feature-icon" src="/images/index/icon-member.png" mode="aspectFit" />
       <text class="feature-label">会员中心</text>
     </view>
     <view class="feature-item" bindtap="goRecharge">
-      <image class="feature-icon" src="/images/icon-recharge.png" mode="aspectFit" />
+      <image class="feature-icon" src="/images/index/icon-recharge.png" mode="aspectFit" />
       <text class="feature-label">充值中心</text>
     </view>
   </view>
@@ -54,7 +54,7 @@
     <view class="feature-list-item" bindtap="goInvite">
       <view class="flex-between">
         <view class="flex-center">
-          <image class="list-icon" src="/images/icon-invite.png" mode="aspectFit" />
+          <image class="list-icon" src="/images/index/icon-invite.png" mode="aspectFit" />
           <text>邀请有礼</text>
         </view>
         <text class="list-arrow">›</text>
@@ -63,7 +63,7 @@
     <view class="feature-list-item" bindtap="goStores">
       <view class="flex-between">
         <view class="flex-center">
-          <image class="list-icon" src="/images/icon-store.png" mode="aspectFit" />
+          <image class="list-icon" src="/images/index/icon-store.png" mode="aspectFit" />
           <text>门店导航</text>
         </view>
         <text class="list-arrow">›</text>
@@ -77,8 +77,4 @@
     <text class="footer-sub">Eat Bold, Move Bold</text>
   </view>
 
-  <!-- 技术支持 -->
-  <view class="tech-support">
-    <text class="tech-text">爨火餐饮系统 点击了解详情 ></text>
-  </view>
 </view>

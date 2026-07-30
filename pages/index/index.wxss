@@ -7,7 +7,7 @@
 /* 顶部品牌 */
 .header {
   background: linear-gradient(135deg, #E8420F, #F57235);
-  padding: 60rpx 30rpx 80rpx;
+  padding: 100rpx 30rpx 80rpx;
   display: flex;
   justify-content: center;
   position: relative;
@@ -27,7 +27,7 @@
 }
 .logo {
   width: 200rpx;
-  height: 80rpx;
+  height: 200rpx;
 }
 
 /* 欢迎条 */
