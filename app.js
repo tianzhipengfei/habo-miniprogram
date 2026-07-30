@@ -32,10 +32,13 @@ App({
         method,
         data,
         header,
-        success(res) {
+        timeout: 10000,
+        // 用箭头函数保证 this 指向 App 实例（避免 401 清理时 this.globalData 报错）
+        success: (res) => {
           if (res.statusCode === 401) {
             wx.removeStorageSync('token');
-            this.globalData.token = '';
+            getApp().globalData.token = '';
+            wx.showToast({ title: '登录已过期，请重新登录', icon: 'none' });
             wx.navigateTo({ url: '/pages/index/index' });
             reject(new Error('登录过期'));
             return;
@@ -43,11 +46,12 @@ App({
           if (res.statusCode >= 200 && res.statusCode < 300) {
             resolve(res.data);
           } else {
-            wx.showToast({ title: res.data?.detail || '请求失败', icon: 'none' });
-            reject(res.data);
+            const msg = (res.data && (res.data.detail || res.data.message)) || '请求失败';
+            wx.showToast({ title: msg, icon: 'none' });
+            reject(res.data || new Error(msg));
           }
         },
-        fail(err) {
+        fail: (err) => {
           wx.showToast({ title: '网络异常，请重试', icon: 'none' });
           reject(err);
         },
@@ -98,14 +102,15 @@ App({
     });
   },
 
-  /** 获取用户信息 */
+  /** 获取用户信息（返回 Promise，便于调用方链式处理） */
   fetchUserInfo() {
-    if (!this.globalData.token) return;
-    this.get('/users/me')
+    if (!this.globalData.token) return Promise.resolve(null);
+    return this.get('/users/me')
       .then((data) => {
         this.globalData.userInfo = data.user;
+        return data.user;
       })
-      .catch(() => {});
+      .catch(() => null);
   },
 
   /** 检查登录 */

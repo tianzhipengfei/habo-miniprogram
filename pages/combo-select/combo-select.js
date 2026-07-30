@@ -55,6 +55,28 @@ Page({
     this.setData({ totalRequired: total });
   },
 
+  /** 重算套餐总价（含各项加价与自定义加价） */
+  recalcComboPrice() {
+    let comboPrice = parseFloat(this.data.product.price) || 0;
+    this.data.tabGroups.forEach((g) => {
+      const selected = this.data.selectedMap[g.id] || [];
+      selected.forEach((optId) => {
+        const opt = g.options.find((o) => o.id === optId);
+        if (!opt) return;
+        comboPrice += parseFloat(opt.extra_price || 0);
+        // 自定义加价（如加冰 +¥2）：默认选中项也计入价格
+        const custom = this.data.customMap[optId] || {};
+        const customOpts = (opt.product && opt.product.custom_options) || [];
+        customOpts.forEach((co, i) => {
+          if (custom[`opt_${i}`] !== false) {
+            comboPrice += parseFloat(co.price || 0);
+          }
+        });
+      });
+    });
+    this.setData({ comboPrice });
+  },
+
   switchTab(e) {
     this.setData({ currentTab: e.currentTarget.dataset.index });
   },
@@ -102,17 +124,7 @@ Page({
       totalSelected += arr.length;
     });
 
-    // 计算价格
-    let comboPrice = parseFloat(this.data.product.price) || 0;
-    this.data.tabGroups.forEach((g) => {
-      const s = selectedMap[g.id] || [];
-      s.forEach((optId) => {
-        const opt = g.options.find((o) => o.id === optId);
-        if (opt) comboPrice += parseFloat(opt.extra_price || 0);
-      });
-    });
-
-    this.setData({ selectedMap, totalSelected, comboPrice });
+    this.setData({ selectedMap, totalSelected }, () => this.recalcComboPrice());
 
     // 如果该选项有定制项（如加冰），弹出定制弹窗
     if (selected.includes(option.id) && option.product && option.product.custom_options && option.product.custom_options.length > 0) {
@@ -138,7 +150,7 @@ Page({
           const current = this.data.customMap[option.id] || {};
           const newCustom = { ...current, [key]: !current[key] };
           const customMap = { ...this.data.customMap, [option.id]: newCustom };
-          this.setData({ customMap });
+          this.setData({ customMap }, () => this.recalcComboPrice());
           wx.showToast({ title: (newCustom[key] !== false ? '已添加' : '已移除') + customOpts[idx].name, icon: 'none' });
         }
       },

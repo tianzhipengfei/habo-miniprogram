@@ -10,13 +10,13 @@ Page({
   onShow() {
     if (app.globalData.token && app.globalData.userInfo) {
       this.setData({ hasLogin: true, user: app.globalData.userInfo });
-    } else if (app.globalData.token) {
-      app.fetchUserInfo();
-      setTimeout(() => {
-        if (app.globalData.userInfo) {
-          this.setData({ hasLogin: true, user: app.globalData.userInfo });
-        }
-      }, 500);
+      return;
+    }
+    if (app.globalData.token) {
+      // 用 Promise 链等待用户信息返回，避免 setTimeout 轮询的竞态
+      app.fetchUserInfo().then((user) => {
+        if (user) this.setData({ hasLogin: true, user });
+      });
     }
   },
 

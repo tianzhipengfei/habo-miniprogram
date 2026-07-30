@@ -44,6 +44,19 @@
     </view>
   </view>
 
+  <!-- 优惠 -->
+  <view class="section">
+    <view class="section-title">优惠</view>
+    <view class="amount-row">
+      <text class="amount-label">余额抵扣（可用 ¥{{balance}}）</text>
+      <switch checked="{{useBalance}}" bindchange="onUseBalanceChange" disabled="{{balance <= 0}}" color="#E8420F" />
+    </view>
+    <view class="amount-row coupon-row" bindtap="selectCoupon">
+      <text class="amount-label">优惠券</text>
+      <text class="amount-value">{{couponId ? couponName : '请选择'}}</text>
+    </view>
+  </view>
+
   <!-- 金额汇总 -->
   <view class="section">
     <view class="amount-row">

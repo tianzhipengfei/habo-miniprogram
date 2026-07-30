@@ -59,5 +59,9 @@
     }
   },
   "requiredPrivateInfos": ["getLocation", "chooseLocation"],
-  "sitemapLocation": "sitemap.json"
+  "sitemapLocation": "sitemap.json",
+  "usingComponents": {
+    "empty-state": "/components/empty-state/empty-state",
+    "stepper": "/components/stepper/stepper"
+  }
 }

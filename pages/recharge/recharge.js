@@ -1,6 +1,10 @@
 // 充值页
 const app = getApp();
 
+// 自定义充值金额上下限（按业务调整）
+const RECHARGE_MIN = 1;
+const RECHARGE_MAX = 5000;
+
 Page({
   data: {
     balance: 0,
@@ -48,7 +52,11 @@ Page({
   },
 
   onCustomAmount(e) {
-    const val = parseFloat(e.detail.value) || 0;
+    let val = parseFloat(e.detail.value) || 0;
+    if (val > RECHARGE_MAX) {
+      val = RECHARGE_MAX;
+      wx.showToast({ title: `单笔最多¥${RECHARGE_MAX}`, icon: 'none' });
+    }
     this.setData({
       customAmount: e.detail.value,
       selectedAmount: 0,
@@ -59,8 +67,8 @@ Page({
 
   doRecharge() {
     const amount = this.data.rechargeAmount;
-    if (amount <= 0) {
-      wx.showToast({ title: '请选择或输入金额', icon: 'none' });
+    if (amount < RECHARGE_MIN || amount > RECHARGE_MAX) {
+      wx.showToast({ title: `金额需在 ¥${RECHARGE_MIN}-¥${RECHARGE_MAX} 之间`, icon: 'none' });
       return;
     }
 
