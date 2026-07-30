@@ -31,6 +31,7 @@ Page({
       ...g,
       options: (g.options || []).map((opt) => ({
         ...opt,
+        selected: false,
         product: opt.product ? this._fmtProduct(opt.product) : null,
       })),
     };
@@ -53,6 +54,7 @@ Page({
             product_id: product.id,
             product: { ...product },
             extra_price: 0,
+            selected: false,
           }],
         };
 
@@ -92,9 +94,10 @@ Page({
 
   toggleOption(e) {
     const groupId = e.currentTarget.dataset.groupId;
-    const option = e.currentTarget.dataset.option;
+    const optionId = e.currentTarget.dataset.optionId;
+    const option = this._findOption(groupId, optionId);
     const group = this._getGroup(groupId);
-    if (!group) return;
+    if (!group || !option) return;
 
     // 售罄不可选
     if (option.product && option.product.stock === 0) {
@@ -103,20 +106,20 @@ Page({
     }
 
     const selected = [...(this.data.selectedMap[group.id] || [])];
-    const idx = selected.indexOf(option.id);
+    const idx = selected.indexOf(optionId);
 
     if (idx >= 0) {
       selected.splice(idx, 1);
     } else {
       if (selected.length >= group.max_select) {
         if (group.max_select === 1) {
-          selected[0] = option.id;
+          selected[0] = optionId;
         } else {
           wx.showToast({ title: `最多选${group.max_select}项`, icon: 'none' });
           return;
         }
       } else {
-        selected.push(option.id);
+        selected.push(optionId);
       }
     }
 
@@ -126,9 +129,10 @@ Page({
   // 黑色箭头按钮：进入定制/选择
   onCustomBtnTap(e) {
     const groupId = e.currentTarget.dataset.groupId;
-    const option = e.currentTarget.dataset.option;
+    const optionId = e.currentTarget.dataset.optionId;
+    const option = this._findOption(groupId, optionId);
     const group = this._getGroup(groupId);
-    if (!group) return;
+    if (!group || !option) return;
 
     // 售罄不可操作
     if (option.product && option.product.stock === 0) {
@@ -138,16 +142,16 @@ Page({
 
     // 如果尚未选中，先选中
     const selected = [...(this.data.selectedMap[group.id] || [])];
-    if (!selected.includes(option.id)) {
+    if (!selected.includes(optionId)) {
       if (selected.length >= group.max_select) {
         if (group.max_select === 1) {
-          selected[0] = option.id;
+          selected[0] = optionId;
         } else {
           wx.showToast({ title: `最多选${group.max_select}项`, icon: 'none' });
           return;
         }
       } else {
-        selected.push(option.id);
+        selected.push(optionId);
       }
       this._commitSelection(group.id, selected, option);
     }
@@ -156,6 +160,13 @@ Page({
     if (option.product && option.product.custom_options && option.product.custom_options.length > 0) {
       this.showCustomSheet(option);
     }
+  },
+
+  // 按 groupId + optionId 找到完整 option（避免通过 dataset 传大对象）
+  _findOption(groupId, optionId) {
+    const group = this._getGroup(groupId);
+    if (!group) return null;
+    return group.options.find((o) => o.id === optionId) || null;
   },
 
   _commitSelection(groupId, selected, option) {
@@ -184,10 +195,28 @@ Page({
       comboPriceText: comboPrice.toFixed(2),
     });
 
+    // 同步每个 option 的 selected 标志，供 WXML 直接绑定（避免模板方法调用不刷新）
+    this._syncSelected();
+
     // 选中且带定制项时自动弹出定制
     if (selected.includes(option.id) && option.product && option.product.custom_options && option.product.custom_options.length > 0) {
       this.showCustomSheet(option);
     }
+  },
+
+  // 将 selectedMap 同步到各 group 下 option.selected，WXML 用 opt.selected 判断
+  _syncSelected() {
+    const map = this.data.selectedMap;
+    const syncGroup = (g) => ({
+      ...g,
+      options: g.options.map((o) => ({
+        ...o,
+        selected: (map[g.id] || []).includes(o.id),
+      })),
+    });
+    const burgerGroup = this.data.burgerGroup ? syncGroup(this.data.burgerGroup) : null;
+    const comboGroups = this.data.comboGroups.map(syncGroup);
+    this.setData({ burgerGroup, comboGroups });
   },
 
   showCustomSheet(option) {

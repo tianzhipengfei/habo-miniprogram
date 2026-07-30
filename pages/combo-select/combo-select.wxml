@@ -12,18 +12,18 @@
       </view>
       <view class="option-grid">
         <view
-          class="option-card {{isSelected(burgerGroup.id, opt.id) ? 'selected' : ''}} {{opt.product.stock === 0 ? 'sold-out' : ''}}"
+          class="option-card {{opt.selected ? 'selected' : ''}} {{opt.product.stock === 0 ? 'sold-out' : ''}}"
           wx:for="{{burgerGroup.options}}"
           wx:for-item="opt"
           wx:key="id"
           bindtap="toggleOption"
           data-group-id="{{burgerGroup.id}}"
-          data-option="{{opt}}"
+          data-option-id="{{opt.id}}"
         >
           <view class="card-img-wrap">
             <image class="card-img" src="{{opt.product.image}}" mode="aspectFill" />
-            <view class="card-check {{isSelected(burgerGroup.id, opt.id) ? 'checked' : ''}}">
-              <text wx:if="{{isSelected(burgerGroup.id, opt.id)}}">✓</text>
+            <view class="card-check {{opt.selected ? 'checked' : ''}}">
+              <text wx:if="{{opt.selected}}">✓</text>
             </view>
           </view>
           <view class="card-name">{{opt.product.name}}</view>
@@ -37,7 +37,7 @@
                 class="arrow-btn"
                 catchtap="onCustomBtnTap"
                 data-group-id="{{burgerGroup.id}}"
-                data-option="{{opt}}"
+                data-option-id="{{opt.id}}"
               >
                 <text class="arrow-icon">›</text>
               </view>
@@ -54,18 +54,18 @@
       </view>
       <view class="option-grid">
         <view
-          class="option-card {{isSelected(group.id, opt.id) ? 'selected' : ''}} {{opt.product.stock === 0 ? 'sold-out' : ''}}"
+          class="option-card {{opt.selected ? 'selected' : ''}} {{opt.product.stock === 0 ? 'sold-out' : ''}}"
           wx:for="{{group.options}}"
           wx:for-item="opt"
           wx:key="id"
           bindtap="toggleOption"
           data-group-id="{{group.id}}"
-          data-option="{{opt}}"
+          data-option-id="{{opt.id}}"
         >
           <view class="card-img-wrap">
             <image class="card-img" src="{{opt.product.image}}" mode="aspectFill" />
-            <view class="card-check {{isSelected(group.id, opt.id) ? 'checked' : ''}}">
-              <text wx:if="{{isSelected(group.id, opt.id)}}">✓</text>
+            <view class="card-check {{opt.selected ? 'checked' : ''}}">
+              <text wx:if="{{opt.selected}}">✓</text>
             </view>
           </view>
           <view class="card-name">{{opt.product.name}}</view>
@@ -79,7 +79,7 @@
                 class="arrow-btn"
                 catchtap="onCustomBtnTap"
                 data-group-id="{{group.id}}"
-                data-option="{{opt}}"
+                data-option-id="{{opt.id}}"
               >
                 <text class="arrow-icon">›</text>
               </view>
