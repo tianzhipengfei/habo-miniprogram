@@ -26,6 +26,10 @@ App({
       const header = { 'Content-Type': 'application/json' };
       if (needAuth && this.globalData.token) {
         header['Authorization'] = `Bearer ${this.globalData.token}`;
+      } else if (needAuth && !this.globalData.token) {
+        // 未登录却请求需鉴权接口：不发请求，避免无谓的 401 噪音
+        reject(new Error('未登录'));
+        return;
       }
       wx.request({
         url: `${BASE_URL}${url}`,
