@@ -1,0 +1,27 @@
+.stepper {
+  display: inline-flex;
+  align-items: center;
+  border: 1rpx solid #e5e5e5;
+  border-radius: 8rpx;
+  overflow: hidden;
+}
+.step-btn {
+  width: 56rpx;
+  height: 56rpx;
+  line-height: 56rpx;
+  text-align: center;
+  font-size: 36rpx;
+  color: #333;
+  background: #f7f7f7;
+}
+.step-btn:active {
+  background: #ececec;
+}
+.step-btn.disabled {
+  color: #ccc;
+}
+.step-val {
+  min-width: 64rpx;
+  text-align: center;
+  font-size: 28rpx;
+}

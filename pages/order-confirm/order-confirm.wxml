@@ -40,7 +40,20 @@
         <text class="item-name">{{item.product_name}}</text>
         <text class="item-qty">x{{item.quantity}}</text>
       </view>
-      <text class="item-price">¥{{item.price * item.quantity}}</text>
+      <text class="item-price">¥{{item.subtotal}}</text>
+    </view>
+  </view>
+
+  <!-- 优惠 -->
+  <view class="section">
+    <view class="section-title">优惠</view>
+    <view class="amount-row">
+      <text class="amount-label">余额抵扣（可用 ¥{{balance}}）</text>
+      <switch checked="{{useBalance}}" bindchange="onUseBalanceChange" disabled="{{balance <= 0}}" color="#E8420F" />
+    </view>
+    <view class="amount-row coupon-row" bindtap="selectCoupon">
+      <text class="amount-label">优惠券</text>
+      <text class="amount-value">{{couponId ? couponName : '请选择'}}</text>
     </view>
   </view>
 
@@ -70,6 +83,6 @@
       <text class="total-label">实付</text>
       <text class="price price-lg">¥{{payAmount}}</text>
     </view>
-    <view class="submit-btn" bindtap="submitOrder">提交订单</view>
+    <view class="submit-btn {{submitting ? 'disabled' : ''}}" bindtap="submitOrder">{{submitting ? '提交中...' : '提交订单'}}</view>
   </view>
 </view>
