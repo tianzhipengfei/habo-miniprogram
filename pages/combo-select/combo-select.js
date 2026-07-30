@@ -5,8 +5,6 @@ Page({
   data: {
     product: {},
     comboGroups: [],
-    currentGroup: 0,
-    currentOptions: [],
     selectedMap: {},   // { groupId: [optionId] }
     totalSelected: 0,
     totalRequired: 0,
@@ -28,7 +26,6 @@ Page({
           comboPrice: parseFloat(product.price) || 0,
         });
         this.calcRequired();
-        this.updateCurrentOptions();
       });
   },
 
@@ -40,26 +37,19 @@ Page({
     this.setData({ totalRequired: total });
   },
 
-  switchGroup(e) {
-    this.setData({ currentGroup: e.currentTarget.dataset.index });
-    this.updateCurrentOptions();
-  },
-
-  updateCurrentOptions() {
-    const group = this.data.comboGroups[this.data.currentGroup];
-    this.setData({ currentOptions: group ? (group.options || []) : [] });
-  },
-
-  isSelected(groupIndex, optionId) {
-    const group = this.data.comboGroups[groupIndex];
+  isSelected(gi, optionId) {
+    const group = this.data.comboGroups[gi];
     if (!group) return false;
     const selected = this.data.selectedMap[group.id] || [];
     return selected.includes(optionId);
   },
 
   toggleOption(e) {
+    const gi = e.currentTarget.dataset.groupIndex;
     const option = e.currentTarget.dataset.option;
-    const group = this.data.comboGroups[this.data.currentGroup];
+    const group = this.data.comboGroups[gi];
+    if (!group) return;
+
     const selected = [...(this.data.selectedMap[group.id] || [])];
     const idx = selected.indexOf(option.id);
 
@@ -67,7 +57,6 @@ Page({
       selected.splice(idx, 1);
     } else {
       if (selected.length >= group.max_select) {
-        // 单选模式：替换
         if (group.max_select === 1) {
           selected[0] = option.id;
         } else {

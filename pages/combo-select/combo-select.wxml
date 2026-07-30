@@ -2,39 +2,33 @@
 <view class="page">
   <view class="header">
     <text class="combo-name">{{product.name}}</text>
+    <text class="combo-hint">请选择套餐内容（共 {{totalRequired}} 项）</text>
   </view>
 
-  <!-- 分组 Tab -->
-  <scroll-view class="group-tabs" scroll-x>
-    <view
-      class="group-tab {{currentGroup === index ? 'active' : ''}}"
-      wx:for="{{comboGroups}}"
-      wx:key="id"
-      wx:for-index="index"
-      bindtap="switchGroup"
-      data-index="{{index}}"
-    >
-      <text>{{item.name}}</text>
-      <text class="group-progress">{{selectedMap[item.id] ? selectedMap[item.id].length : 0}}/{{item.max_select}}</text>
-    </view>
-  </scroll-view>
-
-  <!-- 当前分组可选商品 -->
-  <scroll-view class="option-list" scroll-y>
-    <view
-      class="option-item {{isSelected(currentGroup, item.id) ? 'selected' : ''}}"
-      wx:for="{{currentOptions}}"
-      wx:key="id"
-      bindtap="toggleOption"
-      data-option="{{item}}"
-    >
-      <image class="option-img" src="{{item.product.image}}" mode="aspectFill" />
-      <view class="option-info">
-        <text class="option-name">{{item.product.name}}</text>
-        <text class="option-price">¥{{item.product.price}} {{item.extra_price > 0 ? '+¥' + item.extra_price : ''}}</text>
+  <!-- 所有分组上下堆叠 -->
+  <scroll-view class="option-scroll" scroll-y>
+    <view class="group-section" wx:for="{{comboGroups}}" wx:key="id" wx:for-index="gi">
+      <view class="group-title">
+        <text class="group-name">{{item.name}}</text>
+        <text class="group-limit">选 {{item.max_select}} 项</text>
       </view>
-      <view class="option-check {{isSelected(currentGroup, item.id) ? 'checked' : ''}}">
-        <text wx:if="{{isSelected(currentGroup, item.id)}}">✓</text>
+      <view
+        class="option-item {{isSelected(gi, opt.id) ? 'selected' : ''}}"
+        wx:for="{{item.options}}"
+        wx:for-item="opt"
+        wx:key="id"
+        bindtap="toggleOption"
+        data-group-index="{{gi}}"
+        data-option="{{opt}}"
+      >
+        <image class="option-img" src="{{opt.product.image}}" mode="aspectFill" />
+        <view class="option-info">
+          <text class="option-name">{{opt.product.name}}</text>
+          <text class="option-price">¥{{opt.product.price}} {{opt.extra_price > 0 ? '+¥' + opt.extra_price : ''}}</text>
+        </view>
+        <view class="option-check {{isSelected(gi, opt.id) ? 'checked' : ''}}">
+          <text wx:if="{{isSelected(gi, opt.id)}}">✓</text>
+        </view>
       </view>
     </view>
   </scroll-view>
