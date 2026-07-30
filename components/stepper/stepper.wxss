@@ -17,6 +17,9 @@
 .step-btn:active {
   background: #ececec;
 }
+.step-btn.disabled {
+  color: #ccc;
+}
 .step-val {
   min-width: 64rpx;
   text-align: center;

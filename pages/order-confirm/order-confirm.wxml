@@ -40,7 +40,7 @@
         <text class="item-name">{{item.product_name}}</text>
         <text class="item-qty">x{{item.quantity}}</text>
       </view>
-      <text class="item-price">¥{{item.price * item.quantity}}</text>
+      <text class="item-price">¥{{item.subtotal}}</text>
     </view>
   </view>
 
@@ -83,6 +83,6 @@
       <text class="total-label">实付</text>
       <text class="price price-lg">¥{{payAmount}}</text>
     </view>
-    <view class="submit-btn" bindtap="submitOrder">提交订单</view>
+    <view class="submit-btn {{submitting ? 'disabled' : ''}}" bindtap="submitOrder">{{submitting ? '提交中...' : '提交订单'}}</view>
   </view>
 </view>

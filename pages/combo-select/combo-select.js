@@ -74,7 +74,8 @@ Page({
         });
       });
     });
-    this.setData({ comboPrice });
+    // 保留两位小数，规避浮点累加误差
+    this.setData({ comboPrice: Math.round(comboPrice * 100) / 100 });
   },
 
   switchTab(e) {
@@ -148,16 +149,21 @@ Page({
         if (idx < customOpts.length) {
           const key = `opt_${idx}`;
           const current = this.data.customMap[option.id] || {};
-          const newCustom = { ...current, [key]: !current[key] };
+          // 未设置时默认为选中（!== false），取反基于"当前实际选中态"，
+          // 修复首次点击取消时 !undefined === true 导致点击无效的问题
+          const curChecked = current[key] !== false;
+          const newCustom = { ...current, [key]: !curChecked };
           const customMap = { ...this.data.customMap, [option.id]: newCustom };
           this.setData({ customMap }, () => this.recalcComboPrice());
-          wx.showToast({ title: (newCustom[key] !== false ? '已添加' : '已移除') + customOpts[idx].name, icon: 'none' });
+          wx.showToast({ title: (!curChecked ? '已添加' : '已移除') + customOpts[idx].name, icon: 'none' });
         }
       },
     });
   },
 
   addToCart() {
+    // 防重复提交：请求返回前忽略连点
+    if (this._adding) return;
     if (this.data.totalSelected < this.data.totalRequired) {
       wx.showToast({ title: '请完成所有选择', icon: 'none' });
       return;
@@ -169,6 +175,7 @@ Page({
       return;
     }
 
+    this._adding = true;
     app.post('/cart/items', {
       store_id: store.id,
       product_id: this.data.product.id,
@@ -179,6 +186,8 @@ Page({
       wx.showToast({ title: '已加入购物车', icon: 'success' });
       app.globalData.cartCount = (app.globalData.cartCount || 0) + 1;
       setTimeout(() => wx.navigateBack(), 1000);
+    }).catch(() => {
+      this._adding = false;
     });
   },
 });

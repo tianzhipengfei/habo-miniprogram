@@ -55,3 +55,6 @@
   font-size: 30rpx;
   font-weight: 500;
 }
+.submit-btn.disabled {
+  opacity: 0.6;
+}

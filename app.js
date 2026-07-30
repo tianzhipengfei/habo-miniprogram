@@ -39,7 +39,8 @@ App({
             wx.removeStorageSync('token');
             getApp().globalData.token = '';
             wx.showToast({ title: '登录已过期，请重新登录', icon: 'none' });
-            wx.navigateTo({ url: '/pages/index/index' });
+            // index 是 tabBar 页面，navigateTo 无法跳转，使用 reLaunch 清栈回首页
+            wx.reLaunch({ url: '/pages/index/index' });
             reject(new Error('登录过期'));
             return;
           }
