@@ -1,75 +1,109 @@
-<!-- 套餐选择页 -->
+<!-- 套餐选择页：上下堆叠分组，每组三列卡片 -->
 <view class="page">
   <view class="header">
     <text class="combo-name">{{product.name}}</text>
   </view>
 
-  <!-- 分组 Tab -->
-  <scroll-view class="tab-bar" scroll-x>
-    <view
-      class="tab-item {{currentTab === index ? 'active' : ''}}"
-      wx:for="{{tabGroups}}"
-      wx:key="id"
-      wx:for-index="index"
-      bindtap="switchTab"
-      data-index="{{index}}"
-    >
-      <text>{{item.name}}</text>
-      <text class="tab-progress">{{selectedMap[item.id] ? selectedMap[item.id].length : 0}}/{{item.max_select}}</text>
-    </view>
-  </scroll-view>
-
-  <!-- 当前分组选项 -->
   <scroll-view class="option-scroll" scroll-y>
-    <view class="option-grid" wx:for="{{tabGroups[currentTab].options}}" wx:for-item="opt" wx:key="id">
-      <view
-        class="option-card {{isSelected(currentTab, opt.id) ? 'selected' : ''}} {{opt.product.stock === 0 ? 'sold-out' : ''}}"
-        bindtap="toggleOption"
-        data-group-index="{{currentTab}}"
-        data-option="{{opt}}"
-      >
-        <!-- 图片区域 70% -->
-        <view class="card-img-wrap">
-          <image class="card-img" src="{{opt.product.image}}" mode="aspectFill" />
-          <view class="sold-out-mask" wx:if="{{opt.product.stock === 0}}">
-            <text>售罄</text>
-          </view>
-          <view class="card-check {{isSelected(currentTab, opt.id) ? 'checked' : ''}}">
-            <text wx:if="{{isSelected(currentTab, opt.id)}}">✓</text>
-          </view>
-        </view>
-        <!-- 名称 -->
-        <view class="card-name">{{opt.product.name}}</view>
-        <!-- 底部：价格 + 定制按钮 -->
-        <view class="card-footer">
-          <view wx:if="{{opt.product.stock === 0}}">
-            <text class="sold-out-text">售罄</text>
-          </view>
-          <block wx:else>
-            <text class="card-price">¥{{opt.product.price}}</text>
-            <view
-              class="custom-btn"
-              wx:if="{{opt.product.custom_options && opt.product.custom_options.length > 0}}"
-              catchtap="showCustomSheet"
-              data-option="{{opt}}"
-            >
-              <text>定制</text>
+    <!-- 汉堡分组 -->
+    <view class="group-section" wx:if="{{burgerGroup}}">
+      <view class="group-title">
+        <text>{{burgerGroup.name}}（{{selectedMap[burgerGroup.id] ? selectedMap[burgerGroup.id].length : 0}}/{{burgerGroup.max_select}}）</text>
+      </view>
+      <view class="option-grid">
+        <view
+          class="option-card {{isSelected(burgerGroup.id, opt.id) ? 'selected' : ''}} {{opt.product.stock === 0 ? 'sold-out' : ''}}"
+          wx:for="{{burgerGroup.options}}"
+          wx:for-item="opt"
+          wx:key="id"
+          bindtap="toggleOption"
+          data-group-id="{{burgerGroup.id}}"
+          data-option="{{opt}}"
+        >
+          <view class="card-img-wrap">
+            <image class="card-img" src="{{opt.product.image}}" mode="aspectFill" />
+            <view class="card-check {{isSelected(burgerGroup.id, opt.id) ? 'checked' : ''}}">
+              <text wx:if="{{isSelected(burgerGroup.id, opt.id)}}">✓</text>
             </view>
-          </block>
+          </view>
+          <view class="card-name">{{opt.product.name}}</view>
+          <view class="card-footer">
+            <block wx:if="{{opt.product.stock === 0}}">
+              <text class="sold-out-text">已售罄</text>
+            </block>
+            <block wx:else>
+              <text class="card-price">¥{{opt.product.priceText}}</text>
+              <view
+                class="arrow-btn"
+                catchtap="onCustomBtnTap"
+                data-group-id="{{burgerGroup.id}}"
+                data-option="{{opt}}"
+              >
+                <text class="arrow-icon">›</text>
+              </view>
+            </block>
+          </view>
         </view>
       </view>
     </view>
-    <empty-state wx:if="{{!tabGroups[currentTab].options || tabGroups[currentTab].options.length === 0}}" text="暂无选项" />
+
+    <!-- 饮品/小吃等实际分组 -->
+    <view class="group-section" wx:for="{{comboGroups}}" wx:key="id" wx:for-item="group" wx:for-index="gi">
+      <view class="group-title">
+        <text>{{group.name}} 任选{{group.max_select}}项（{{selectedMap[group.id] ? selectedMap[group.id].length : 0}}/{{group.max_select}}）</text>
+      </view>
+      <view class="option-grid">
+        <view
+          class="option-card {{isSelected(group.id, opt.id) ? 'selected' : ''}} {{opt.product.stock === 0 ? 'sold-out' : ''}}"
+          wx:for="{{group.options}}"
+          wx:for-item="opt"
+          wx:key="id"
+          bindtap="toggleOption"
+          data-group-id="{{group.id}}"
+          data-option="{{opt}}"
+        >
+          <view class="card-img-wrap">
+            <image class="card-img" src="{{opt.product.image}}" mode="aspectFill" />
+            <view class="card-check {{isSelected(group.id, opt.id) ? 'checked' : ''}}">
+              <text wx:if="{{isSelected(group.id, opt.id)}}">✓</text>
+            </view>
+          </view>
+          <view class="card-name">{{opt.product.name}}</view>
+          <view class="card-footer">
+            <block wx:if="{{opt.product.stock === 0}}">
+              <text class="sold-out-text">已售罄</text>
+            </block>
+            <block wx:else>
+              <text class="card-price">¥{{opt.product.priceText}}</text>
+              <view
+                class="arrow-btn"
+                catchtap="onCustomBtnTap"
+                data-group-id="{{group.id}}"
+                data-option="{{opt}}"
+              >
+                <text class="arrow-icon">›</text>
+              </view>
+            </block>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <view class="bottom-placeholder"></view>
   </scroll-view>
 
-  <!-- 底部 -->
+  <!-- 底部栏 -->
   <view class="bottom-bar">
+    <view class="cart-icon-wrap">
+      <image class="cart-icon" src="/images/menu/icon-cart.png" mode="aspectFit" />
+      <view class="cart-badge">{{totalSelected}}/{{totalRequired}}</view>
+    </view>
     <view class="combo-summary">
-      <text class="summary-text">已选 {{totalSelected}}/{{totalRequired}} 项</text>
-      <text class="summary-price">¥{{comboPrice}}</text>
+      <text class="summary-price">¥{{comboPriceText}}</text>
     </view>
-    <view class="add-btn {{totalSelected < totalRequired ? 'disabled' : ''}}" bindtap="addToCart">
-      <text>加入购物车</text>
-    </view>
+    <view
+      class="add-btn {{totalSelected < totalRequired ? 'disabled' : ''}}"
+      bindtap="addToCart"
+    >加入购物车</view>
   </view>
 </view>
