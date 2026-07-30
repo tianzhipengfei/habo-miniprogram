@@ -2,35 +2,64 @@
 <view class="page">
   <view class="header">
     <text class="combo-name">{{product.name}}</text>
-    <text class="combo-hint">请选择套餐内容（共 {{totalRequired}} 项）</text>
   </view>
 
-  <!-- 所有分组上下堆叠 -->
+  <!-- 分组 Tab -->
+  <scroll-view class="tab-bar" scroll-x>
+    <view
+      class="tab-item {{currentTab === index ? 'active' : ''}}"
+      wx:for="{{tabGroups}}"
+      wx:key="id"
+      wx:for-index="index"
+      bindtap="switchTab"
+      data-index="{{index}}"
+    >
+      <text>{{item.name}}</text>
+      <text class="tab-progress">{{selectedMap[item.id] ? selectedMap[item.id].length : 0}}/{{item.max_select}}</text>
+    </view>
+  </scroll-view>
+
+  <!-- 当前分组选项 -->
   <scroll-view class="option-scroll" scroll-y>
-    <view class="group-section" wx:for="{{comboGroups}}" wx:key="id" wx:for-index="gi">
-      <view class="group-title">
-        <text class="group-name">{{item.name}}</text>
-        <text class="group-limit">选 {{item.max_select}} 项</text>
-      </view>
+    <view class="option-grid" wx:for="{{tabGroups[currentTab].options}}" wx:for-item="opt" wx:key="id">
       <view
-        class="option-item {{isSelected(gi, opt.id) ? 'selected' : ''}}"
-        wx:for="{{item.options}}"
-        wx:for-item="opt"
-        wx:key="id"
+        class="option-card {{isSelected(currentTab, opt.id) ? 'selected' : ''}} {{opt.product.stock === 0 ? 'sold-out' : ''}}"
         bindtap="toggleOption"
-        data-group-index="{{gi}}"
+        data-group-index="{{currentTab}}"
         data-option="{{opt}}"
       >
-        <image class="option-img" src="{{opt.product.image}}" mode="aspectFill" />
-        <view class="option-info">
-          <text class="option-name">{{opt.product.name}}</text>
-          <text class="option-price">¥{{opt.product.price}} {{opt.extra_price > 0 ? '+¥' + opt.extra_price : ''}}</text>
+        <!-- 图片区域 70% -->
+        <view class="card-img-wrap">
+          <image class="card-img" src="{{opt.product.image}}" mode="aspectFill" />
+          <view class="sold-out-mask" wx:if="{{opt.product.stock === 0}}">
+            <text>售罄</text>
+          </view>
+          <view class="card-check {{isSelected(currentTab, opt.id) ? 'checked' : ''}}">
+            <text wx:if="{{isSelected(currentTab, opt.id)}}">✓</text>
+          </view>
         </view>
-        <view class="option-check {{isSelected(gi, opt.id) ? 'checked' : ''}}">
-          <text wx:if="{{isSelected(gi, opt.id)}}">✓</text>
+        <!-- 名称 -->
+        <view class="card-name">{{opt.product.name}}</view>
+        <!-- 底部：价格 + 定制按钮 -->
+        <view class="card-footer">
+          <view wx:if="{{opt.product.stock === 0}}">
+            <text class="sold-out-text">售罄</text>
+          </view>
+          <block wx:else>
+            <text class="card-price">¥{{opt.product.price}}</text>
+            <view
+              class="custom-btn"
+              wx:if="{{opt.product.custom_options && opt.product.custom_options.length > 0}}"
+              catchtap="showCustomSheet"
+              data-option="{{opt}}"
+            >
+              <text>定制</text>
+            </view>
+          </block>
         </view>
       </view>
     </view>
+    <empty-state wx:if="{{!tabGroups[currentTab].options || tabGroups[currentTab].options.length === 0}}" text="暂无选项" />
   </scroll-view>
 
   <!-- 底部 -->
