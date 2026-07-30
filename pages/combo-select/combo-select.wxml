@@ -93,11 +93,10 @@
       </view>
     </view>
 
-    <view class="bottom-placeholder"></view>
-  </scroll-view>
+      </scroll-view>
 
-  <!-- 底部栏 -->
-  <view class="bottom-bar">
+      <!-- 底部栏 -->
+      <view class="bottom-bar">
     <view class="cart-icon-wrap">
       <image class="cart-icon" src="/images/menu/icon-cart.png" mode="aspectFit" />
       <view class="cart-badge">{{totalSelected}}/{{totalRequired}}</view>
