@@ -12,6 +12,8 @@ Page({
     totalRequired: 0,
     comboPrice: 0,
     comboPriceText: '0.00',
+    showCartPanel: false,    // 是否显示"当前已选"弹层
+    panelItems: [],          // 弹层展示的已选项
   },
 
   onLoad(options) {
@@ -249,6 +251,69 @@ Page({
       },
     });
   },
+
+  // 构建"当前已选"弹层数据
+  _buildPanelItems() {
+    const items = [];
+    const allGroups = [this.data.burgerGroup, ...this.data.comboGroups].filter(Boolean);
+    allGroups.forEach((g) => {
+      const selected = this.data.selectedMap[g.id] || [];
+      selected.forEach((optId) => {
+        const opt = g.options.find((o) => o.id === optId);
+        if (!opt || !opt.product) return;
+        const custom = this.data.customMap[opt.id] || {};
+        const customNames = (opt.product.custom_options || [])
+          .map((co, i) => ({ name: co.name, checked: custom[`opt_${i}`] !== false }))
+          .filter((co) => co.checked)
+          .map((co) => co.name);
+        const extra = parseFloat(opt.extra_price || 0);
+        items.push({
+          groupId: g.id,
+          optionId: opt.id,
+          groupName: g.name,
+          name: opt.product.name,
+          image: opt.product.image,
+          specText: customNames.length ? customNames.join('/') : '标准',
+          extraText: extra > 0 ? `+¥${extra.toFixed(2)}` : '',
+        });
+      });
+    });
+    return items;
+  },
+
+  // 点击底部购物车图标：展开/收起当前套餐已选内容
+  toggleCartPanel() {
+    if (this.data.showCartPanel) {
+      this.setData({ showCartPanel: false });
+      return;
+    }
+    const panelItems = this._buildPanelItems();
+    if (!panelItems.length) {
+      wx.showToast({ title: '还没有选择内容', icon: 'none' });
+      return;
+    }
+    this.setData({ panelItems, showCartPanel: true });
+  },
+
+  closeCartPanel() {
+    this.setData({ showCartPanel: false });
+  },
+
+  // 从弹层移除某个已选项（取消选择）
+  removePanelItem(e) {
+    const { groupId, optionId } = e.currentTarget.dataset;
+    const option = this._findOption(groupId, optionId);
+    const group = this._getGroup(groupId);
+    if (!group || !option) return;
+    const selected = (this.data.selectedMap[group.id] || []).filter((id) => id !== optionId);
+    this._commitSelection(group.id, selected, option);
+    const panelItems = this._buildPanelItems();
+    this.setData({ panelItems });
+    if (!panelItems.length) this.setData({ showCartPanel: false });
+  },
+
+  // 阻止冒泡，避免点击弹层内容时关闭弹层
+  noop() {},
 
   // 生成购物车展示用的规格摘要，例如 "标准; 冻柠乐(去冰); 小份薯条"
   _buildComboInfo() {

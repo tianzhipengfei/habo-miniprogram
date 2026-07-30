@@ -93,20 +93,51 @@
       </view>
     </view>
 
-      </scroll-view>
+  </scroll-view>
 
-      <!-- 底部栏 -->
-      <view class="bottom-bar">
-    <view class="cart-icon-wrap">
+  <!-- 底部栏 -->
+  <view class="bottom-bar">
+    <view class="cart-icon-wrap" bindtap="toggleCartPanel">
       <image class="cart-icon" src="/images/menu/icon-cart.png" mode="aspectFit" />
       <view class="cart-badge">{{totalSelected}}/{{totalRequired}}</view>
     </view>
-    <view class="combo-summary">
+    <view class="combo-summary" bindtap="toggleCartPanel">
       <text class="summary-price">¥{{comboPriceText}}</text>
     </view>
     <view
       class="add-btn {{totalSelected < totalRequired ? 'disabled' : ''}}"
       bindtap="addToCart"
     >加入购物车</view>
+  </view>
+
+  <!-- 当前已选弹层遮罩 -->
+  <view class="cart-panel-mask {{showCartPanel ? 'show' : ''}}" bindtap="closeCartPanel"></view>
+
+  <!-- 当前已选弹层内容 -->
+  <view class="cart-panel {{showCartPanel ? 'show' : ''}}" catchtap="noop">
+    <view class="cart-panel-header">
+      <text class="cart-panel-title">当前已选（{{totalSelected}}/{{totalRequired}}）</text>
+      <view class="cart-panel-close" bindtap="closeCartPanel">
+        <text class="close-icon">×</text>
+      </view>
+    </view>
+    <scroll-view class="cart-panel-list" scroll-y>
+      <view class="cart-panel-item" wx:for="{{panelItems}}" wx:key="optionId">
+        <image class="cart-panel-img" src="{{item.image}}" mode="aspectFill" />
+        <view class="cart-panel-info">
+          <text class="cart-panel-name">{{item.name}}</text>
+          <text class="cart-panel-spec">{{item.groupName}} · {{item.specText}}</text>
+        </view>
+        <view class="cart-panel-right">
+          <text class="cart-panel-extra" wx:if="{{item.extraText}}">{{item.extraText}}</text>
+          <view class="cart-panel-del" bindtap="removePanelItem" data-group-id="{{item.groupId}}" data-option-id="{{item.optionId}}">
+            <text class="del-icon">🗑</text>
+          </view>
+        </view>
+      </view>
+      <view class="cart-panel-empty" wx:if="{{panelItems.length === 0}}">
+        <text>还没有选择内容</text>
+      </view>
+    </scroll-view>
   </view>
 </view>

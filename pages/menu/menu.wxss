@@ -195,53 +195,70 @@
 }
 .closed-hours { display: block; font-size: 22rpx; margin-top: 8rpx; opacity: 0.7; }
 
-/* 购物车栏 - 橙色系，紧凑高度 */
+/* 购物车栏 - 与套餐选择页 bottom-bar 统一风格：白底 + 阴影 */
 .cart-bar {
   display: flex;
   align-items: center;
-  padding: 12rpx 30rpx;
-  background: linear-gradient(135deg, #E8420F, #F57235);
-  padding-bottom: calc(12rpx + env(safe-area-inset-bottom));
+  padding: 16rpx 30rpx;
+  padding-bottom: calc(16rpx + env(safe-area-inset-bottom));
+  background: #fff;
+  box-shadow: 0 -2rpx 16rpx rgba(0,0,0,0.08);
   position: relative;
   z-index: 100;
 }
-.cart-icon-wrap { position: relative; }
+.cart-icon-wrap {
+  position: relative;
+  width: 84rpx;
+  height: 84rpx;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 2rpx 12rpx rgba(0,0,0,0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
 .cart-icon {
-  width: 48rpx;
-  height: 48rpx;
+  width: 44rpx;
+  height: 44rpx;
 }
 .cart-badge {
   position: absolute;
-  top: -8rpx;
-  right: -10rpx;
-  background: #fff;
-  color: var(--color-primary);
+  top: -6rpx;
+  right: -6rpx;
+  min-width: 40rpx;
+  height: 40rpx;
+  line-height: 40rpx;
+  padding: 0 10rpx;
+  border-radius: 20rpx;
+  background: #1a1a1a;
+  color: #fff;
   font-size: 20rpx;
-  min-width: 32rpx;
-  height: 32rpx;
-  border-radius: 16rpx;
   text-align: center;
-  line-height: 32rpx;
-  padding: 0 6rpx;
-  font-weight: bold;
+  box-sizing: border-box;
 }
 .cart-price {
-  margin-left: 16rpx;
   flex: 1;
+  margin-left: 24rpx;
 }
-.cart-price .price { color: #fff; font-size: 30rpx; font-weight: bold; }
+.cart-price .price {
+  color: #1a1a1a;
+  font-size: 40rpx;
+  font-weight: bold;
+}
 .checkout-btn {
-  background: #fff;
-  color: var(--color-primary);
-  padding: 12rpx 40rpx;
-  border-radius: 36rpx;
-  font-size: 26rpx;
-  font-weight: 600;
+  background: var(--color-primary);
+  color: #fff;
+  padding: 20rpx 36rpx;
+  border-radius: 40rpx;
+  font-size: 28rpx;
+  font-weight: 500;
   margin-left: auto;
+  flex-shrink: 0;
 }
 .checkout-btn.disabled {
-  background: rgba(255,255,255,0.4);
-  color: rgba(255,255,255,0.7);
+  background: #d1d1d1;
+  color: #fff;
   pointer-events: none;
 }
 
@@ -265,7 +282,7 @@
   position: fixed;
   left: 0;
   right: 0;
-  bottom: calc(100rpx + env(safe-area-inset-bottom));
+  bottom: calc(116rpx + env(safe-area-inset-bottom));
   /* 低于 cart-bar(100)，滑动过程中从购物车栏"后面"升起，不会遮挡底栏 */
   z-index: 95;
   background: #fff;
