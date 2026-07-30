@@ -41,29 +41,45 @@
       </view>
     </scroll-view>
 
-    <!-- 右侧商品 -->
-    <scroll-view class="product-list" scroll-y>
+    <!-- 右侧商品：所有商品按分类纵向排列 -->
+    <scroll-view
+      class="product-list"
+      scroll-y
+      scroll-into-view="{{scrollIntoView}}"
+      scroll-with-animation
+      bindscroll="onProductScroll"
+    >
       <view
-        class="product-card"
-        wx:for="{{filteredProducts}}"
-        wx:key="id"
-        bindtap="goDetail"
-        data-id="{{item.id}}"
+        class="cat-section"
+        wx:for="{{categorySections}}"
+        wx:key="category.id"
+        id="cat-{{item.category.id}}"
       >
-        <image class="product-img" src="{{item.image}}" mode="aspectFill" />
-        <view class="product-info">
-          <text class="product-name">{{item.name}}</text>
-          <text class="product-desc" wx:if="{{item.description}}">{{item.description}}</text>
-          <text class="product-sales">销量：{{item.sales_count}}</text>
-          <view class="product-bottom">
-            <text class="product-price">¥{{item.price}}<text class="price-from" wx:if="{{item.is_combo}}"> 起</text></text>
-            <view class="select-btn" catchtap="quickAdd" data-item="{{item}}">
-              <text>选择</text>
+        <view class="section-title">{{item.category.name}}</view>
+        <view
+          class="product-card"
+          wx:for="{{item.products}}"
+          wx:for-item="prod"
+          wx:key="id"
+          bindtap="goDetail"
+          data-id="{{prod.id}}"
+        >
+          <image class="product-img" src="{{prod.image}}" mode="aspectFill" />
+          <view class="product-info">
+            <text class="product-name">{{prod.name}}</text>
+            <text class="product-desc" wx:if="{{prod.description}}">{{prod.description}}</text>
+            <text class="product-sales">销量：{{prod.sales_count}}</text>
+            <view class="product-bottom">
+              <text class="product-price">¥{{prod.price}}<text class="price-from" wx:if="{{prod.is_combo}}"> 起</text></text>
+              <view class="select-btn" catchtap="quickAdd" data-item="{{prod}}">
+                <text>选择</text>
+              </view>
             </view>
           </view>
         </view>
       </view>
-      <empty-state wx:if="{{filteredProducts.length === 0 && !loading}}" text="暂无商品" />
+      <empty-state wx:if="{{categorySections.length === 0 && !loading}}" text="暂无商品" />
+      <view class="list-bottom"></view>
     </scroll-view>
   </view>
 

@@ -1,4 +1,4 @@
-// 点单页
+// 点单页（左右联动）
 const app = getApp();
 
 // 分类 icon 映射
@@ -15,28 +15,38 @@ Page({
     store: null,
     categories: [],
     products: [],
-    filteredProducts: [],
+    categorySections: [],    // [{ category, products }] 按分类顺序
     recommends: [],
-    currentCategory: 0,
+    currentCategory: 0,      // 当前高亮分类 index
+    scrollIntoView: '',      // 右侧滚动锚点 id
     cartCount: 0,
     cartTotal: 0,
     loading: true,
   },
 
+  // 非渲染用的内部状态
+  _scrollTop: 0,
+  _sectionTops: [],
+  _scrollLock: false,
+  _lockTimer: null,
+
   onShow() {
     const store = app.globalData.currentStore || wx.getStorageSync('currentStore');
-    if (store) {
-      this.setData({ store });
-      this.loadCategories(store.id);
-      this.loadProducts(store.id);
-      this.loadCart();
-    }
+    if (!store) return;
+    this.setData({ store });
+    this._scrollTop = 0;
+    this._sectionTops = [];
+    this._scrollLock = false;
+    const p1 = this.loadCategories(store.id);
+    const p2 = this.loadProducts(store.id);
+    Promise.all([p1, p2]).then(() => this.buildSections());
+    this.loadCart();
   },
 
   loadCategories(storeId) {
-    app.get(`/products/categories?store_id=${storeId}`, {}, false)
+    return app.get(`/products/categories?store_id=${storeId}`, {}, false)
       .then((data) => {
-        const categories = (data.categories || []).map(c => ({
+        const categories = (data.categories || []).map((c) => ({
           ...c,
           icon: CATEGORY_ICONS[c.name] || '📦',
         }));
@@ -45,33 +55,74 @@ Page({
       .catch(() => {});
   },
 
-  loadProducts(storeId, categoryId) {
+  loadProducts(storeId) {
     this.setData({ loading: true });
-    let url = `/products?store_id=${storeId}`;
-    if (categoryId) url += `&category_id=${categoryId}`;
-
-    app.get(url, {}, false)
+    return app.get(`/products?store_id=${storeId}`, {}, false)
       .then((data) => {
         const products = data.products || [];
         const recommends = products.filter((p) => p.is_recommend);
         this.setData({ products, recommends, loading: false });
-        this.updateFilteredProducts();
       })
       .catch(() => {
         this.setData({ loading: false });
       });
   },
 
-  updateFilteredProducts() {
-    const { currentCategory, categories, products } = this.data;
-    let filtered;
-    if (currentCategory === 0) {
-      filtered = products;
-    } else {
-      const catId = categories[currentCategory]?.id;
-      filtered = products.filter((p) => p.category_id === catId);
+  // 按分类把所有商品分组，构建右侧 section 列表
+  buildSections() {
+    const { categories, products } = this.data;
+    if (!categories.length) return;
+    const sections = categories.map((cat) => ({
+      category: cat,
+      products: products.filter((p) => p.category_id === cat.id),
+    }));
+    this.setData({ categorySections: sections, currentCategory: 0 });
+    // 渲染完成后测量各 section 在内容区的顶部偏移，供滚动联动使用
+    setTimeout(() => this.measureSections(), 150);
+  },
+
+  // 测量每个分类 section 相对 scroll-view 内容顶部的坐标
+  measureSections() {
+    const query = wx.createSelectorQuery().in(this);
+    query.select('.product-list').boundingClientRect();
+    query.selectAll('.cat-section').boundingClientRect();
+    query.exec((res) => {
+      const listRect = res[0];
+      const secRects = res[1];
+      if (!listRect || !secRects || !secRects.length) return;
+      const scrollTop = this._scrollTop || 0;
+      this._sectionTops = secRects.map((s) => s.top - listRect.top + scrollTop);
+    });
+  },
+
+  // 点击左侧分类：右侧滚动到对应分组（加锁避免滚动事件覆盖高亮）
+  switchCategory(e) {
+    const index = e.currentTarget.dataset.index;
+    const sections = this.data.categorySections;
+    if (!sections[index]) return;
+    this.setData({
+      currentCategory: index,
+      scrollIntoView: `cat-${sections[index].category.id}`,
+    });
+    this._scrollLock = true;
+    clearTimeout(this._lockTimer);
+    this._lockTimer = setTimeout(() => { this._scrollLock = false; }, 400);
+  },
+
+  // 右侧滚动：反向联动左侧高亮
+  onProductScroll(e) {
+    this._scrollTop = e.detail.scrollTop;
+    if (this._scrollLock) return;
+    const tops = this._sectionTops || [];
+    const top = e.detail.scrollTop;
+    let active = 0;
+    for (let i = 0; i < tops.length; i++) {
+      if (tops[i] <= top + 8) active = i;
+      else break;
     }
-    this.setData({ filteredProducts: filtered });
+    if (active !== this.data.currentCategory) {
+      this.setData({ currentCategory: active });
+    }
   },
 
   loadCart() {
@@ -84,18 +135,6 @@ Page({
         app.globalData.cartCount = data.count || 0;
       })
       .catch(() => {});
-  },
-
-  switchCategory(e) {
-    const index = e.currentTarget.dataset.index;
-    const category = this.data.categories[index];
-    this.setData({ currentCategory: index });
-    if (category) {
-      this.loadProducts(this.data.store.id, category.id);
-    } else {
-      // index === 0 表示"全部"，显示所有产品
-      this.updateFilteredProducts();
-    }
   },
 
   goDetail(e) {
