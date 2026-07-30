@@ -21,6 +21,8 @@ Page({
     scrollIntoView: '',      // 右侧滚动锚点 id
     cartCount: 0,
     cartTotal: 0,
+    cartItems: [],        // 购物车商品明细
+    showCartPanel: false, // 是否显示底部购物车弹层
     loading: true,
   },
 
@@ -128,13 +130,26 @@ Page({
   loadCart() {
     app.get('/cart')
       .then((data) => {
+        const items = (data.items || []).map((item) => ({
+          ...item,
+          specText: this._formatCartSpec(item),
+        }));
         this.setData({
           cartCount: data.count || 0,
           cartTotal: data.total || 0,
+          cartItems: items,
         });
         app.globalData.cartCount = data.count || 0;
       })
       .catch(() => {});
+  },
+
+  // 格式化购物车规格摘要
+  _formatCartSpec(item) {
+    if (item.combo_info && item.combo_info.summary) {
+      return `(${item.combo_info.summary})`;
+    }
+    return '(标准)';
   },
 
   goDetail(e) {
@@ -163,8 +178,30 @@ Page({
     });
   },
 
-  goCart() {
-    wx.navigateTo({ url: '/pages/cart/cart' });
+  // 点击底部购物车图标：展开/收起已选餐品面板
+  toggleCartPanel() {
+    if (this.data.cartCount === 0) {
+      wx.showToast({ title: '购物车是空的', icon: 'none' });
+      return;
+    }
+    this.setData({ showCartPanel: !this.data.showCartPanel });
+  },
+
+  closeCartPanel() {
+    this.setData({ showCartPanel: false });
+  },
+
+  // 从购物车删除商品
+  removeCartItem(e) {
+    const id = e.currentTarget.dataset.id;
+    const willEmpty = this.data.cartCount <= 1;
+    app.del(`/cart/items/${id}`)
+      .then(() => {
+        if (willEmpty) {
+          this.setData({ showCartPanel: false });
+        }
+        this.loadCart();
+      });
   },
 
   goCheckout() {
@@ -179,4 +216,7 @@ Page({
   goStores() {
     wx.navigateTo({ url: '/pages/store-select/store-select' });
   },
+
+  // 阻止冒泡，避免点击弹层内容时关闭弹层
+  noop() {},
 });

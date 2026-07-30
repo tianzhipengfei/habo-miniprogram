@@ -250,6 +250,27 @@ Page({
     });
   },
 
+  // 生成购物车展示用的规格摘要，例如 "标准; 冻柠乐(去冰); 小份薯条"
+  _buildComboInfo() {
+    const parts = [];
+    const allGroups = [this.data.burgerGroup, ...this.data.comboGroups].filter(Boolean);
+    allGroups.forEach((g) => {
+      const selected = this.data.selectedMap[g.id] || [];
+      selected.forEach((optId) => {
+        const opt = g.options.find((o) => o.id === optId);
+        if (!opt || !opt.product) return;
+        const name = opt.product.name || '';
+        const custom = this.data.customMap[opt.id] || {};
+        const customNames = (opt.product.custom_options || [])
+          .map((co, i) => ({ name: co.name, checked: custom[`opt_${i}`] !== false }))
+          .filter((co) => co.checked)
+          .map((co) => co.name);
+        parts.push(customNames.length ? `${name}(${customNames.join('/')})` : name);
+      });
+    });
+    return { summary: parts.length ? parts.join('; ') : '标准' };
+  },
+
   addToCart() {
     // 防重复提交：请求返回前忽略连点
     if (this._adding) return;
@@ -271,6 +292,7 @@ Page({
       quantity: 1,
       combo_selections: this.data.selectedMap,
       combo_custom: this.data.customMap,
+      combo_info: this._buildComboInfo(),
     }).then(() => {
       wx.showToast({ title: '已加入购物车', icon: 'success' });
       app.globalData.cartCount = (app.globalData.cartCount || 0) + 1;
